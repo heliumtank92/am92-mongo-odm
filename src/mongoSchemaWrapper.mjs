@@ -1,8 +1,8 @@
 import { Schema } from 'mongoose'
 import mongooseLeanVirtuals from 'mongoose-lean-virtuals'
-import MONGO_CONFIG from './MONGO_CONFIG.mjs'
+import CONFIG from './CONFIG.mjs'
 
-const { REPLICASET_COUNT } = MONGO_CONFIG
+const { REPLICASET_COUNT } = CONFIG
 const maxWriteCount = REPLICASET_COUNT ? (REPLICASET_COUNT + 1) : 'majority'
 const DEFAULT_OPTIONS = {
   timestamps: true

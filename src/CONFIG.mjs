@@ -73,7 +73,7 @@ const SSL_CONFIG = SSL_ENABLED
     }
   : {}
 
-const MONGO_CONFIG = {
+const CONFIG = {
   DBNAME: MONGO_DBNAME,
   CONNECTION_URI,
   REPLICASET_COUNT,
@@ -85,4 +85,4 @@ const MONGO_CONFIG = {
   }
 }
 
-export default MONGO_CONFIG
+export default CONFIG

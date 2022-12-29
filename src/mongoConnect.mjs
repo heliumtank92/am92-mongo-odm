@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
-import MONGO_CONFIG from './MONGO_CONFIG.mjs'
+import CONFIG from './CONFIG.mjs'
 
-const { CONNECTION_URI, OPTIONS } = MONGO_CONFIG
+const { CONNECTION_URI, OPTIONS } = CONFIG
 
 const mongoConnect = async () => {
   console.log('[Connection] Connecting to MongoDB...')
