@@ -237,9 +237,9 @@ export default class MongoModel {
     return data
   }
 
-  async aggregate (query = {}) {
+  async aggregate (pipeline = []) {
     try {
-      const result = this.MongooseModel.aggregate(query)
+      const result = this.MongooseModel.aggregate(pipeline)
       return result
     } catch (error) {
       throw new MongoError(error)
