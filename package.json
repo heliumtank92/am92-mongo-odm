@@ -1,6 +1,6 @@
 {
   "name": "@am92/mongo-odm",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Mongo DB ODM (Object Document Mapper)",
   "main": "src/MongoModel.mjs",
   "scripts": {

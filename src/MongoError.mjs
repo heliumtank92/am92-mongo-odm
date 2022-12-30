@@ -1,3 +1,7 @@
+const DEFAULT_ERROR_MSG = 'Mongo Error'
+const DEFAULT_ERROR_STATUS_CODE = 500
+const DEFAULT_ERROR_CODE = 'MONGO_ERROR'
+
 const STATUS_CODE_MAP = {
   MongooseError: 500,
   CastError: 422,
@@ -16,32 +20,35 @@ const STATUS_CODE_MAP = {
   RuntimeError: 500
 }
 
-export default class MongoError {
-  constructor (error) {
+export default class MongoError extends Error {
+  constructor (e = {}, eMap) {
+    if (e._isCustomError && !eMap) { return e }
+
+    super()
+
+    const { message, statusCode, errorCode } = eMap || {}
     const {
-      _isMongoError,
-      name,
-      msg,
-      code,
-      errors
-    } = error
+      message: eMessage,
+      name: eName,
+      msg: eMsg
+    } = e
 
-    if (_isMongoError) { return error }
+    const {
+      npm_package_name: pkgName = '',
+      npm_package_version: pkgVersion = ''
+    } = process.env
+    const service = `${pkgName}@${pkgVersion}`
 
-    const statusCode = STATUS_CODE_MAP[name] || 500
-    const err = { name, code, errors }
-
+    this._isCustomError = true
     this._isMongoError = true
-    this.name = name
-    this.code = code
-
-    this.message = msg
-    this.statusCode = statusCode
-    this.error = err
-  }
-
-  toJSON () {
-    const { message, statusCode, error } = this
-    return { message, statusCode, error }
+    this.service = service
+    this.message = message || eMessage || eMsg || DEFAULT_ERROR_MSG
+    this.statusCode = statusCode || STATUS_CODE_MAP[eName] || DEFAULT_ERROR_STATUS_CODE
+    this.errorCode = errorCode || DEFAULT_ERROR_CODE
+    this.error = {
+      ...e,
+      message: eMessage || eMsg || this.message,
+      errorCode: this.errorCode
+    }
   }
 }

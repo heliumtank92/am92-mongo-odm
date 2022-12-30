@@ -110,35 +110,36 @@ export default CollectionODM
 <br />
 
 ### Properties of MongoModel Instance
-|Properties |Description |
-|:----------|:-----------|
-|CollectionODM.ModelName|Name of the Model|
-|CollectionODM.Schema|mongoose Collection Schema|
-|CollectionODM.MongooseModel|mongoose Model instance|
+| Properties                  | Description                |
+| :-------------------------- | :------------------------- |
+| CollectionODM.ModelName     | Name of the Model          |
+| CollectionODM.Schema        | mongoose Collection Schema |
+| CollectionODM.MongooseModel | mongoose Model instance    |
 
 <br />
 
 ### Methods of MongoModel Instance
-|Method |Description |
-|:------|:-----------|
-|[CollectionODM.getCount](#collectionodmgetcountquery)|Returns the count of Documents|
-|[CollectionODM.createOne](#collectionodmcreateoneattrs)|Creates a new Document|
-|[CollectionODM.createMany](#collectionodmcreatemanyattrs)|Creates multiple new Documents|
-|[CollectionODM.replaceAll](#collectionodmreplaceallattrs)|Replaces all Documents with new Documents|
-|[CollectionODM.findOne](#collectionodmfindonequery-projection-options)|Finds and returns a single Document|
-|[CollectionODM.findMany](#collectionodmfindmanyquery-projection-options)|Finds and returns mulitple Documents|
-|[CollectionODM.findById](#collectionodmfindbyidid-projection-options)|Finds using MongoDB ObjectId and returns a single Document|
-|[CollectionODM.findOneBy](#collectionodmfindonebykey-value-projection-options)|Finds using key-value pair and returns a single Document|
-|[CollectionODM.findManyBy](#collectionodmfindmanybykey-value-projection-options)|Finds using key-value pair and returns mulitple Documents|
-|[CollectionODM.updateOne]()|Updates a single Document and returns the Updated Document|
-|[CollectionODM.updateMany](#collectionodmupdatemanyquery-updateobj-options)|Updates multiple Documents and returns the Updated Documents|
-|[CollectionODM.updateById](#collectionodmupdatebyidid-updateobj-options)|Updates a single Document with spcified MongoDB ObjectId and returns the Updated Document|
-|[CollectionODM.updateOneBy](#collectionodmupdateonequery-updateobj-options)|Updates a single Document using key-value pair and returns the Updated Document|
-|[CollectionODM.updateManyBy](#collectionodmupdatemanybykey-value-updateobj-options)|Updates multiple Documents using key-value pair and returns the Updated Documents|
-|[CollectionODM.remove](#collectionodmremovequery-options)|Removes multiple documents and returns the delete response|
-|[CollectionODM.removeById](#collectionodmremovebyidid-options)|Deletes a single Document with spicifed MongoDB ObjectId and returns the Deleted Document|
-|[CollectionODM.list](#collectionodmlistprojection-options)|Returns all the Documents from a given Collection|
-|[CollectionODM.search](#collectionodmsearchquery-projection-options)|Searches and returns Documents from a given Collection|
+| Method                                                                              | Description                                                                               |
+| :---------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------- |
+| [CollectionODM.getCount](#collectionodmgetcountquery)                               | Returns the count of Documents                                                            |
+| [CollectionODM.createOne](#collectionodmcreateoneattrs)                             | Creates a new Document                                                                    |
+| [CollectionODM.createMany](#collectionodmcreatemanyattrs)                           | Creates multiple new Documents                                                            |
+| [CollectionODM.replaceAll](#collectionodmreplaceallattrs)                           | Replaces all Documents with new Documents                                                 |
+| [CollectionODM.findOne](#collectionodmfindonequery-projection-options)              | Finds and returns a single Document                                                       |
+| [CollectionODM.findMany](#collectionodmfindmanyquery-projection-options)            | Finds and returns mulitple Documents                                                      |
+| [CollectionODM.findById](#collectionodmfindbyidid-projection-options)               | Finds using MongoDB ObjectId and returns a single Document                                |
+| [CollectionODM.findOneBy](#collectionodmfindonebykey-value-projection-options)      | Finds using key-value pair and returns a single Document                                  |
+| [CollectionODM.findManyBy](#collectionodmfindmanybykey-value-projection-options)    | Finds using key-value pair and returns mulitple Documents                                 |
+| [CollectionODM.updateOne]()                                                         | Updates a single Document and returns the Updated Document                                |
+| [CollectionODM.updateMany](#collectionodmupdatemanyquery-updateobj-options)         | Updates multiple Documents and returns the Updated Documents                              |
+| [CollectionODM.updateById](#collectionodmupdatebyidid-updateobj-options)            | Updates a single Document with spcified MongoDB ObjectId and returns the Updated Document |
+| [CollectionODM.updateOneBy](#collectionodmupdateonequery-updateobj-options)         | Updates a single Document using key-value pair and returns the Updated Document           |
+| [CollectionODM.updateManyBy](#collectionodmupdatemanybykey-value-updateobj-options) | Updates multiple Documents using key-value pair and returns the Updated Documents         |
+| [CollectionODM.remove](#collectionodmremovequery-options)                           | Removes multiple documents and returns the delete response                                |
+| [CollectionODM.removeById](#collectionodmremovebyidid-options)                      | Deletes a single Document with spicifed MongoDB ObjectId and returns the Deleted Document |
+| [CollectionODM.list](#collectionodmlistprojection-options)                          | Returns all the Documents from a given Collection                                         |
+| [CollectionODM.search](#collectionodmsearchquery-projection-options)                | Searches and returns Documents from a given Collection                                    |
+| [CollectionODM.aggregate]()                                                         | Runs mongoose aggregate function                                                          |
 
 
 <br />
@@ -432,6 +433,20 @@ const responseData = await CollectionODM.search(query, projection, options)
 const queryDocsCount = responseData._meta.totalDocuments
 const pageDocsCount = responseData._meta.documentsCount
 const docs = responseData.documents
+```
+
+<br />
+
+#### CollectionODM.aggregate(pipeline)<br />
+###### Arguments ######
+* pipeline (Array): mongoose pipeline array as per 'aggregate' method
+
+###### Returns ######
+* result (Any): Result as per mongoose 'aggregate' method
+
+###### Example ######
+```javascript
+const result = await CollectionODM.aggregate(pipeline)
 ```
 
 <br />
