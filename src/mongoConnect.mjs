@@ -4,7 +4,6 @@ import CONFIG from './CONFIG.mjs'
 const { CONNECTION_URI, OPTIONS } = CONFIG
 
 const mongoConnect = async () => {
-  console.log('[Connection] Connecting to MongoDB...')
   await mongoose.connect(CONNECTION_URI, OPTIONS)
 }
 
