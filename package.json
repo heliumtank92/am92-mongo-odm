@@ -1,11 +1,10 @@
 {
   "name": "@am92/mongo-odm",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Mongo DB ODM (Object Document Mapper)",
   "main": "src/MongoModel.mjs",
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": "git@github.com:heliumtank92/am92-mongo-odm.git",
   "homepage": "https://github.com/heliumtank92/am92-mongo-odm#readme",
@@ -32,6 +31,12 @@
   "dependencies": {
     "mongoose": "^6.8.1",
     "mongoose-lean-virtuals": "^0.9.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.7",
+    "@babel/preset-env": "^7.20.2",
+    "babel-jest": "^29.3.1",
+    "jest": "^29.3.1"
   },
   "keywords": [
     "mongo",
