@@ -5,8 +5,7 @@
       {
         "targets": {
           "esmodules": true
-        },
-        "modules": "cjs"
+        }
       }
     ]
   ],

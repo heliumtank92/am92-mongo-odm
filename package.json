@@ -2,13 +2,15 @@
   "name": "@am92/mongo-odm",
   "version": "1.0.6",
   "description": "Mongo DB ODM (Object Document Mapper)",
+  "types": "module",
   "main": "dist/MongoModel.js",
   "module": "src/MongoModel.mjs",
   "scripts": {
     "test": "jest",
-    "build:source": "rimraf dist/ && babel src/ --out-dir dist/ --copy-files",
-    "clean": "rimraf dist/ && rimraf test-dist/",
-    "build": "npm run build:source"
+    "build": "rimraf dist/ && babel src/ --out-dir dist/ --copy-files",
+    "preversion": "pnpm test",
+    "version": "pnpm run build && git add -A dist",
+    "postversion": "git push && git push --tags"
   },
   "repository": "git@github.com:heliumtank92/am92-mongo-odm.git",
   "homepage": "https://github.com/heliumtank92/am92-mongo-odm#readme",
@@ -48,6 +50,7 @@
     }
   },
   "dependencies": {
+    "@am92/api-logger": "^1.0.5",
     "mongoose": "^6.8.1",
     "mongoose-lean-virtuals": "^0.9.1"
   },
