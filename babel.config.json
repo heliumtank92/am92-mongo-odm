@@ -5,7 +5,22 @@
       {
         "targets": {
           "esmodules": true
-        }
+        },
+        "modules": "cjs"
+      }
+    ]
+  ],
+  "plugins": [
+    [
+      "@babel/plugin-proposal-object-rest-spread",
+      {
+        "useBuiltIns": true
+      }
+    ],
+    [
+      "babel-plugin-module-extension",
+      {
+        "mjs": "js"
       }
     ]
   ]
