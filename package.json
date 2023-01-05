@@ -34,7 +34,6 @@
     "./mongoose": "./src/mongoose.mjs"
   },
   "dependencies": {
-    "@am92/api-logger": "^1.0.8",
     "mongoose": "^6.8.2",
     "mongoose-lean-virtuals": "^0.9.1"
   },
