@@ -9,7 +9,7 @@
 
 <br />
 
-This is an ODM (Object Document Mapping) which provides CRUD functionalities to interact with MongoDB Collections. This package uses [mongoose](https://www.npmjs.com/package/mongoose) package using its v6.x.x version.
+This is an ODM (Object Document Mapping) which provides CRUD functionalities to interact with MongoDB Collections. This package uses [mongoose](https://www.npmjs.com/package/mongoose) package using its ^6.8.2 version.
 
 This package provides the following functionalities:
 * MongoDB Connection Helper
