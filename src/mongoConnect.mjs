@@ -32,6 +32,7 @@ mongoose.connection.on('close', () => {
 })
 
 mongoose.connection.on('error', (error) => {
+  console.error(`[${SERVICE} MongoOdm] MongoDB Connection Error`, error)
   throw error
 })
 
