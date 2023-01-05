@@ -6,8 +6,8 @@
   "main": "src/MongoModel.mjs",
   "module": "src/MongoModel.mjs",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "preversion": "echo 'Error: no test specified'",
+    "test": "echo 'Error: no test specified'",
+    "preversion": "pnpm test",
     "version": "echo 'Versioning'",
     "postversion": "git push && git push --tags"
   },
@@ -34,11 +34,10 @@
     "./mongoose": "./src/mongoose.mjs"
   },
   "dependencies": {
-    "@am92/api-logger": "^1.0.7",
+    "@am92/api-logger": "^1.0.8",
     "mongoose": "^6.8.2",
     "mongoose-lean-virtuals": "^0.9.1"
   },
-  "devDependencies": {},
   "keywords": [
     "mongo",
     "mongo odm",

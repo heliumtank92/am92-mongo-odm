@@ -1,19 +1,19 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@am92/api-logger': ^1.0.7
+  '@am92/api-logger': ^1.0.8
   mongoose: ^6.8.2
   mongoose-lean-virtuals: ^0.9.1
 
 dependencies:
-  '@am92/api-logger': 1.0.7
+  '@am92/api-logger': 1.0.8
   mongoose: 6.8.2
   mongoose-lean-virtuals: 0.9.1_mongoose@6.8.2
 
 packages:
 
-  /@am92/api-logger/1.0.7:
-    resolution: {integrity: sha512-ud2Od8J1tr4ZGKE2kn13yb8b9CoPxYU2F4ZUSplq1k6I6Gq+jcEOiWAN/4FgybzCFy3sEEzK3Zs08H8PNcOPAw==}
+  /@am92/api-logger/1.0.8:
+    resolution: {integrity: sha512-cnvgfk8vNBcHhRERdfcm7VmYDS38qvyHJbASfT7xUAM2YjQVesASIrqmt3ZTbERucUWEvV5hA8/Pfi70NtkMbw==}
     dependencies:
       chalk: 5.2.0
       winston: 3.8.2
