@@ -73,7 +73,6 @@ Object.keys(INT_CONFIGS).forEach(key => {
 })
 
 if (Object.keys(INVALID_INT_CONFIG).length) {
-  const logFunc = console.fatal || console.error
   logFunc(`[${SERVICE} MongoOdm] Invalid MongoOdm Integer Configs:`, INVALID_INT_CONFIG)
   process.exit(1)
 }
