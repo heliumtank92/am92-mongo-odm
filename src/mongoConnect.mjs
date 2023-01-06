@@ -5,9 +5,9 @@ const { CONNECTION_URI, OPTIONS } = CONFIG
 
 const mongoConnect = async () => {
   if (process.env.NODE_ENV !== 'production') {
-    console.info(`[${SERVICE} MongoOdm] Mongoose Debug Mode Enabled for Non-Production Mode.`)
+    console.debug(`[${SERVICE} MongoOdm] Mongoose Debug Mode Enabled for Non-Production Mode.`)
   }
-  console.trace(`[${SERVICE} MongoOdm] Establishing MongoDB Connection...`)
+  console.info(`[${SERVICE} MongoOdm] Establishing MongoDB Connection...`)
   await mongoose.connect(CONNECTION_URI, OPTIONS)
 }
 
@@ -16,11 +16,13 @@ export default mongoConnect
 mongoose.set('strictQuery', true)
 
 mongoose.connection.on('connected', () => {
-  console.info(`[${SERVICE} MongoOdm] MongoDB Connection Established`)
+  const logFunc = console.success || console.info
+  logFunc(`[${SERVICE} MongoOdm] MongoDB Connection Established`)
 })
 
 mongoose.connection.on('reconnected', () => {
-  console.info(`[${SERVICE} MongoOdm] MongoDB Connection Re-established`)
+  const logFunc = console.success || console.info
+  logFunc(`[${SERVICE} MongoOdm] MongoDB Connection Re-established`)
 })
 
 mongoose.connection.on('disconnected', () => {
@@ -28,12 +30,13 @@ mongoose.connection.on('disconnected', () => {
 })
 
 mongoose.connection.on('close', () => {
-  console.trace(`[${SERVICE} MongoOdm] MongoDB Connection Closed`)
+  console.info(`[${SERVICE} MongoOdm] MongoDB Connection Closed`)
 })
 
 mongoose.connection.on('error', (error) => {
-  console.error(`[${SERVICE} MongoOdm] MongoDB Connection Error`, error)
-  throw error
+  const logFunc = console.fatal || console.error
+  logFunc(`[${SERVICE} MongoOdm] MongoDB Connection Error`, error)
+  process.exit(1)
 })
 
 if (process.env.NODE_ENV !== 'production') { mongoose.set('debug', true) }
