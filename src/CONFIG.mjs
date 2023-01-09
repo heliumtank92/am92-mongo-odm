@@ -1,4 +1,7 @@
 const {
+  npm_package_name: pkgName = '',
+  npm_package_version: pkgVersion = '',
+
   // Basic Details
   MONGO_HOSTS = '',
   MONGO_DBNAME = '',
@@ -22,17 +25,23 @@ const {
   MONGO_POOL_SIZE = '5'
 } = process.env
 
-const USER_AUTH = MONGO_USER_AUTH === 'true'
-const REPLICASET_COUNT = parseInt(MONGO_REPLICASET_COUNT, 10)
-const POOL_SIZE = parseInt(MONGO_POOL_SIZE, 10)
+const SERVICE = `${pkgName}@${pkgVersion}`
+const logFunc = console.fatal || console.error
 
+const USER_AUTH = MONGO_USER_AUTH === 'true'
 const SSL_ENABLED = MONGO_SSL_ENABLED === 'true'
 const SSL_VALIDATE = MONGO_SSL_VALIDATE === 'true'
 
+const MISSING_CONFIG = []
 const REQUIRED_CONFIG = [
   'MONGO_DBNAME',
   'MONGO_HOSTS'
 ]
+const INT_CONFIGS = {
+  MONGO_REPLICASET_COUNT,
+  MONGO_POOL_SIZE
+}
+const INVALID_INT_CONFIG = {}
 
 if (USER_AUTH) {
   REQUIRED_CONFIG.push('MONGO_USERNAME')
@@ -45,18 +54,26 @@ if (SSL_ENABLED) {
 
 REQUIRED_CONFIG.forEach(key => {
   if (!process.env[key]) {
-    console.error('[Error] Missing MongoDB Config:', key)
-    return process.exit(1)
+    MISSING_CONFIG.push(key)
   }
 })
 
-if (isNaN(REPLICASET_COUNT)) {
-  console.error(`[Error] Invalid MongoDB Config: MONGO_REPLICASET_COUNT=${MONGO_REPLICASET_COUNT}`)
+if (MISSING_CONFIG.length) {
+  logFunc(`[${SERVICE} MongoOdm] MongoOdm Config Missing: ${MISSING_CONFIG.join(', ')}`)
   process.exit(1)
 }
 
-if (isNaN(POOL_SIZE)) {
-  console.error(`[Error] Invalid MongoDB Config: MONGO_POOL_SIZE=${MONGO_POOL_SIZE}`)
+Object.keys(INT_CONFIGS).forEach(key => {
+  const value = INT_CONFIGS[key]
+  INT_CONFIGS[key] = parseInt(value, 10)
+
+  if (isNaN(INT_CONFIGS[key])) {
+    INVALID_INT_CONFIG[key] = value
+  }
+})
+
+if (Object.keys(INVALID_INT_CONFIG).length) {
+  logFunc(`[${SERVICE} MongoOdm] Invalid MongoOdm Integer Configs:`, INVALID_INT_CONFIG)
   process.exit(1)
 }
 
@@ -76,8 +93,9 @@ const SSL_CONFIG = SSL_ENABLED
 const CONFIG = {
   DBNAME: MONGO_DBNAME,
   CONNECTION_URI,
-  REPLICASET_COUNT,
+  REPLICASET_COUNT: INT_CONFIGS.MONGO_REPLICASET_COUNT,
   OPTIONS: {
+    maxPoolSize: INT_CONFIGS.MONGO_POOL_SIZE,
     retryWrites: false,
     replicaSet: MONGO_REPLICASET || undefined,
     readPreference: MONGO_READ_PREFERENCE,
@@ -86,11 +104,5 @@ const CONFIG = {
 }
 
 export default CONFIG
-
-const {
-  npm_package_name: pkgName = '',
-  npm_package_version: pkgVersion = ''
-} = process.env
-const SERVICE = `${pkgName}@${pkgVersion}`
 
 export { SERVICE }
