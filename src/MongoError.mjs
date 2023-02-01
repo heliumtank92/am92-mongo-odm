@@ -40,10 +40,6 @@ export default class MongoError extends Error {
     this.message = message || eMessage || eMsg || DEFAULT_ERROR_MSG
     this.statusCode = statusCode || STATUS_CODE_MAP[eName] || DEFAULT_ERROR_STATUS_CODE
     this.errorCode = errorCode || DEFAULT_ERROR_CODE
-    this.error = {
-      ...e,
-      message: eMessage || eMsg || this.message,
-      errorCode: this.errorCode
-    }
+    this.error = e
   }
 }
