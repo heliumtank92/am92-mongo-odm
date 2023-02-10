@@ -128,11 +128,9 @@ export default class MongoModel {
 
   async updateOne (query = {}, updateObj = {}, options = {}) {
     try {
-      const updateOptions = { new: true, rawResult: true, lean: { virtuals: true }, ...options, sanitizeProjection: true }
+      const updateOptions = { new: true, rawResult: false, lean: { virtuals: true }, ...options, sanitizeProjection: true }
       const updateResponse = await this.MongooseModel.findOneAndUpdate(query, updateObj, updateOptions).orFail()
-      const { value } = updateResponse
-      const object = (updateOptions.rawResult && value) || updateResponse
-      return object
+      return updateResponse
     } catch (error) {
       throw new MongoError(error)
     }
@@ -149,12 +147,12 @@ export default class MongoModel {
 
   async updateById (id = '', updateObj = {}, options = {}) {
     try {
-      const updateOptions = { new: true, rawResult: true, lean: { virtuals: true }, ...options, sanitizeProjection: true }
+      const updateOptions = { new: true, rawResult: false, lean: { virtuals: true }, ...options, sanitizeProjection: true }
       const updateResponse = await this.MongooseModel.findByIdAndUpdate(id, updateObj, updateOptions)
       const { value } = updateResponse
       const object = (updateOptions.rawResult && value) || updateResponse
 
-      if (!object) {
+      if (!object._id) {
         const error = {
           message: 'Document Not Found',
           name: 'DocumentNotFoundError',
@@ -163,7 +161,7 @@ export default class MongoModel {
         throw new MongoError(error)
       }
 
-      return object
+      return updateResponse
     } catch (error) {
       throw new MongoError(error)
     }
@@ -192,11 +190,9 @@ export default class MongoModel {
 
   async removeById (id = '', options = {}) {
     try {
-      const removeOptions = { rawResult: true, lean: { virtuals: true }, ...options, sanitizeProjection: true }
+      const removeOptions = { rawResult: false, lean: { virtuals: true }, ...options, sanitizeProjection: true }
       const removeResponse = await this.MongooseModel.findByIdAndRemove(id, removeOptions).orFail()
-      const { value } = removeResponse
-      const object = (removeOptions.rawResult && value) || removeResponse
-      return object
+      return removeResponse
     } catch (error) {
       throw new MongoError(error)
     }
