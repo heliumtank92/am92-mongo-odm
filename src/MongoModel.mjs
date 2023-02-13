@@ -48,20 +48,32 @@ export default class MongoModel {
     }
   }
 
-  async createOne (attrs = {}) {
+  async createOne (attrs = {}, options = {}) {
     try {
-      const object = await this.MongooseModel.create(attrs)
+      const { lean = { virtuals: true }, ...createOptions } = options
+      const document = await this.MongooseModel.create(attrs, createOptions)
+
+      if (!lean) { return document }
+
+      const isLeanObject = typeof lean === 'object' && !(lean instanceof Array)
+      const object = document.toObject((isLeanObject && lean) || {})
       return object
     } catch (error) {
       throw new MongoError(error)
     }
   }
 
-  async createMany (attrs = []) {
+  async createMany (attrs = [], options = {}) {
     if (!attrs.length) { return [] }
 
     try {
-      const objects = await this.MongooseModel.create(attrs)
+      const { lean = { virtuals: true }, ...createOptions } = options
+      const documents = await this.MongooseModel.create(attrs, createOptions)
+
+      if (!lean) { return documents }
+
+      const isLeanObject = typeof lean === 'object' && !(lean instanceof Array)
+      const objects = documents.map((document) => document.toObject((isLeanObject && lean) || {}))
       return objects
     } catch (error) {
       throw new MongoError(error)
