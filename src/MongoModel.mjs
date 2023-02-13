@@ -50,8 +50,8 @@ export default class MongoModel {
 
   async createOne (attrs = {}, options = {}) {
     try {
-      const { lean = { virtuals: true }, ...createOptions } = options
-      const document = await this.MongooseModel.create(attrs, createOptions)
+      const { lean = { virtuals: true } } = options
+      const document = await this.MongooseModel.create(attrs)
 
       if (!lean) { return document }
 
