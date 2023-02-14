@@ -2,6 +2,9 @@
 node_modules/
 .npm
 
+# Build files
+dist
+
 # Log files
 *.log
 
