@@ -34,7 +34,7 @@
     "./mongoose": "./src/mongoose.mjs"
   },
   "dependencies": {
-    "mongoose": "^6.8.2",
+    "mongoose": "^6.9.2",
     "mongoose-lean-virtuals": "^0.9.1"
   },
   "keywords": [
