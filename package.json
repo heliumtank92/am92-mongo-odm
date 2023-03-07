@@ -2,14 +2,36 @@
   "name": "@am92/mongo-odm",
   "version": "1.0.24",
   "description": "Mongo DB ODM (Object Document Mapper)",
-  "types": "module",
-  "main": "./index.mjs",
-  "module": "./index.mjs",
-  "scripts": {
-    "test": "echo 'Error: no test specified'",
-    "preversion": "pnpm test",
-    "version": "echo 'Versioning'",
-    "postversion": "git push && git push --tags"
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.mts",
+      "import": "./src/index.mjs"
+    },
+    "./mongoConnect": {
+      "types": "./types/mongoConnect.d.mts",
+      "import": "./src/mongoConnect.mjs"
+    },
+    "./mongoSchemaWrapper": {
+      "types": "./types/mongoSchemaWrapper.d.mts",
+      "import": "./src/mongoSchemaWrapper.mjs"
+    },
+    "./MongoModel": {
+      "types": "./types/MongoModel.d.mts",
+      "import": "./src/MongoModel.mjs"
+    },
+    "./MongoError": {
+      "types": "./types/MongoError.d.mts",
+      "import": "./src/MongoError.mjs"
+    }
+  },
+  "types": "./types/index.d.mts",
+  "module": "./src/index.mjs",
+  "main": "./src/index.mjs",
+  "dependencies": {
+    "mongoose": "^6.9.2",
+    "mongoose-lean-getters": "^0.4.0",
+    "mongoose-lean-virtuals": "^0.9.1"
   },
   "repository": "git@github.com:heliumtank92/am92-mongo-odm.git",
   "homepage": "https://github.com/heliumtank92/am92-mongo-odm#readme",
@@ -26,17 +48,12 @@
     }
   ],
   "license": "MIT",
-  "exports": {
-    "./mongoConnect": "./mongoConnect.mjs",
-    "./mongoSchemaWrapper": "./mongoSchemaWrapper.mjs",
-    "./MongoModel": "./MongoModel.mjs",
-    "./MongoError": "./MongoError.mjs",
-    "./mongoose": "./mongoose.mjs"
-  },
-  "dependencies": {
-    "mongoose": "^6.9.2",
-    "mongoose-lean-getters": "^0.4.0",
-    "mongoose-lean-virtuals": "^0.9.1"
+  "scripts": {
+    "test": "echo 'Error: no test specified'",
+    "generate:types": "rm -rf types && npx -p typescript tsc",
+    "preversion": "pnpm test",
+    "version": "echo 'Versioning'",
+    "postversion": "git push && git push --tags"
   },
   "keywords": [
     "mongo",
