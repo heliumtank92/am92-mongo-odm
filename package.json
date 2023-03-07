@@ -3,8 +3,8 @@
   "version": "1.0.21",
   "description": "Mongo DB ODM (Object Document Mapper)",
   "types": "module",
-  "main": "src/MongoModel.mjs",
-  "module": "src/MongoModel.mjs",
+  "main": "index.mjs",
+  "module": "index.mjs",
   "scripts": {
     "test": "echo 'Error: no test specified'",
     "preversion": "pnpm test",
@@ -27,6 +27,7 @@
   ],
   "license": "MIT",
   "exports": {
+    ".": "./index.mjs",
     "./mongoConnect": "./src/mongoConnect.mjs",
     "./mongoSchemaWrapper": "./src/mongoSchemaWrapper.mjs",
     "./MongoModel": "./src/MongoModel.mjs",
