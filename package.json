@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "mongoose": "^6.9.2",
+    "mongoose-lean-getters": "^0.4.0",
     "mongoose-lean-virtuals": "^0.9.1"
   },
   "keywords": [

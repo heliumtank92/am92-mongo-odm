@@ -88,7 +88,7 @@ export default class MongoModel {
 
   async findOne (query = {}, projection = {}, options = {}) {
     try {
-      const findOptions = { lean: { virtuals: true }, ...options, sanitizeProjection: true }
+      const findOptions = { lean: { virtuals: true, getters: true }, ...options, sanitizeProjection: true }
       const object = await this.MongooseModel.findOne(query, projection, findOptions)
       return object
     } catch (error) {
@@ -98,7 +98,7 @@ export default class MongoModel {
 
   async findMany (query = {}, projection = {}, options = {}) {
     try {
-      const findOptions = { lean: { virtuals: true }, ...options, sanitizeProjection: true }
+      const findOptions = { lean: { virtuals: true, getters: true }, ...options, sanitizeProjection: true }
       const objects = await this.MongooseModel.find(query, projection, findOptions)
       return objects
     } catch (error) {
@@ -108,7 +108,7 @@ export default class MongoModel {
 
   async findById (id = '', projections = {}, options = {}) {
     try {
-      const findOptions = { lean: { virtuals: true }, ...options, sanitizeProjection: true }
+      const findOptions = { lean: { virtuals: true, getters: true }, ...options, sanitizeProjection: true }
       const object = await this.MongooseModel.findById(id, projections, findOptions)
 
       if (!object) {
@@ -140,7 +140,7 @@ export default class MongoModel {
 
   async updateOne (query = {}, updateObj = {}, options = {}) {
     try {
-      const updateOptions = { new: true, rawResult: false, lean: { virtuals: true }, ...options, sanitizeProjection: true }
+      const updateOptions = { new: true, rawResult: false, lean: { virtuals: true, getters: true }, ...options, sanitizeProjection: true }
       const updateResponse = await this.MongooseModel.findOneAndUpdate(query, updateObj, updateOptions).orFail()
       return updateResponse
     } catch (error) {
@@ -159,7 +159,7 @@ export default class MongoModel {
 
   async updateById (id = '', updateObj = {}, options = {}) {
     try {
-      const updateOptions = { new: true, rawResult: false, lean: { virtuals: true }, ...options, sanitizeProjection: true }
+      const updateOptions = { new: true, rawResult: false, lean: { virtuals: true, getters: true }, ...options, sanitizeProjection: true }
       const updateResponse = await this.MongooseModel.findByIdAndUpdate(id, updateObj, updateOptions)
       const { value } = updateResponse
       const object = (updateOptions.rawResult && value) || updateResponse
@@ -202,7 +202,7 @@ export default class MongoModel {
 
   async removeById (id = '', options = {}) {
     try {
-      const removeOptions = { rawResult: false, lean: { virtuals: true }, ...options, sanitizeProjection: true }
+      const removeOptions = { rawResult: false, lean: { virtuals: true, getters: true }, ...options, sanitizeProjection: true }
       const removeResponse = await this.MongooseModel.findByIdAndRemove(id, removeOptions).orFail()
       return removeResponse
     } catch (error) {

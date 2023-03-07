@@ -1,5 +1,6 @@
 import { Schema } from 'mongoose'
 import mongooseLeanVirtuals from 'mongoose-lean-virtuals'
+import mongooseLeanGetters from 'mongoose-lean-getters'
 import CONFIG from './CONFIG.mjs'
 
 const { REPLICASET_COUNT } = CONFIG
@@ -18,6 +19,7 @@ export default function mongoSchemaWrapper (schemaObject, options = {}) {
 
   const schema = new Schema(schemaObject, schemaOptions)
   schema.plugin(mongooseLeanVirtuals)
+  schema.plugin(mongooseLeanGetters)
 
   return schema
 }

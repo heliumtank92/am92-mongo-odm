@@ -2,10 +2,12 @@ lockfileVersion: 5.4
 
 specifiers:
   mongoose: ^6.9.2
+  mongoose-lean-getters: ^0.4.0
   mongoose-lean-virtuals: ^0.9.1
 
 dependencies:
   mongoose: 6.9.2
+  mongoose-lean-getters: 0.4.0_mongoose@6.9.2
   mongoose-lean-virtuals: 0.9.1_mongoose@6.9.2
 
 packages:
@@ -1192,6 +1194,16 @@ packages:
       saslprep: 1.0.3
     transitivePeerDependencies:
       - aws-crt
+    dev: false
+
+  /mongoose-lean-getters/0.4.0_mongoose@6.9.2:
+    resolution: {integrity: sha512-4YgzBZYFpXZm4Roz2MKXm3X2yDGR6OkpZx0jka4qTM3S3Gul/KV7SqPlZLauJG1RjU9hyuOvnDXYcji7iZXwcA==}
+    engines: {node: '>= 8'}
+    peerDependencies:
+      mongoose: '>= 5.11.0 || 6.x'
+    dependencies:
+      mongoose: 6.9.2
+      mpath: 0.8.4
     dev: false
 
   /mongoose-lean-virtuals/0.9.1_mongoose@6.9.2:
