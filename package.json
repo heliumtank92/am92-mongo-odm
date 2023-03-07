@@ -28,11 +28,11 @@
   "license": "MIT",
   "exports": {
     ".": "./index.mjs",
-    "./mongoConnect": "./src/mongoConnect.mjs",
-    "./mongoSchemaWrapper": "./src/mongoSchemaWrapper.mjs",
-    "./MongoModel": "./src/MongoModel.mjs",
-    "./MongoError": "./src/MongoError.mjs",
-    "./mongoose": "./src/mongoose.mjs"
+    "./mongoConnect": "./mongoConnect.mjs",
+    "./mongoSchemaWrapper": "./mongoSchemaWrapper.mjs",
+    "./MongoModel": "./MongoModel.mjs",
+    "./MongoError": "./MongoError.mjs",
+    "./mongoose": "./mongoose.mjs"
   },
   "dependencies": {
     "mongoose": "^6.9.2",
