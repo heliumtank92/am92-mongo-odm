@@ -22,7 +22,7 @@
     "generate:types": "rm -rf types && npx -p typescript tsc",
     "preversion": "pnpm test",
     "version": "echo 'Versioning'",
-    "postversion": "git push && git push --tags",
+    "postversion": "git push && git push --tags && npm run publish:pkg",
     "publish:pkg": "npm publish"
   },
   "repository": "git@github.com:heliumtank92/am92-mongo-odm.git",
