@@ -150,7 +150,7 @@ export default CollectionODM
 | [CollectionODM.removeById](#collectionodmremovebyidid-options)                      | Deletes a single Document with spicifed MongoDB ObjectId and returns the Deleted Document |
 | [CollectionODM.list](#collectionodmlistprojection-options)                          | Returns all the Documents from a given Collection                                         |
 | [CollectionODM.search](#collectionodmsearchquery-projection-options)                | Searches and returns Documents from a given Collection                                    |
-| [CollectionODM.aggregate]()                                                         | Runs mongoose aggregate function                                                          |
+| [CollectionODM.aggregate](#collectionodmaggregatepipeline)                          | Runs mongoose aggregate function                                                          |
 
 
 <br />
