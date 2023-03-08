@@ -17,6 +17,14 @@
     "mongoose-lean-getters": "^0.4.0",
     "mongoose-lean-virtuals": "^0.9.1"
   },
+  "scripts": {
+    "test": "echo 'Error: no test specified'",
+    "generate:types": "rm -rf types && npx -p typescript tsc",
+    "preversion": "pnpm test",
+    "version": "echo 'Versioning'",
+    "postversion": "git push && git push --tags",
+    "publish:pkg": "npm publish"
+  },
   "repository": "git@github.com:heliumtank92/am92-mongo-odm.git",
   "homepage": "https://github.com/heliumtank92/am92-mongo-odm#readme",
   "contributors": [
@@ -32,12 +40,8 @@
     }
   ],
   "license": "MIT",
-  "scripts": {
-    "test": "echo 'Error: no test specified'",
-    "generate:types": "rm -rf types && npx -p typescript tsc",
-    "preversion": "pnpm test",
-    "version": "echo 'Versioning'",
-    "postversion": "git push && git push --tags"
+  "publishConfig": {
+    "access": "public"
   },
   "keywords": [
     "mongo",
