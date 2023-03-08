@@ -7,22 +7,6 @@
     ".": {
       "types": "./types/index.d.mts",
       "import": "./src/index.mjs"
-    },
-    "./mongoConnect": {
-      "types": "./types/mongoConnect.d.mts",
-      "import": "./src/mongoConnect.mjs"
-    },
-    "./mongoSchemaWrapper": {
-      "types": "./types/mongoSchemaWrapper.d.mts",
-      "import": "./src/mongoSchemaWrapper.mjs"
-    },
-    "./MongoModel": {
-      "types": "./types/MongoModel.d.mts",
-      "import": "./src/MongoModel.mjs"
-    },
-    "./MongoError": {
-      "types": "./types/MongoError.d.mts",
-      "import": "./src/MongoError.mjs"
     }
   },
   "types": "./types/index.d.mts",

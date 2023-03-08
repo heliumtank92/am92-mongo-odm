@@ -34,7 +34,7 @@ This package provides the following functionalities:
 
 ## Installation
 ```bash
-$ npm install --save @am92/mongo-odm
+npm install --save @am92/mongo-odm
 ```
 <br />
 
@@ -62,7 +62,7 @@ export MONGO_POOL_SIZE=5
 ## Connecting to MongoDB
 MongoDB needs to be connected before the 'MongoModel' methods can executed. The connection can be established as shown below:
 ```javascript
-import mongoConnect from '@am92/mongo-odm/mongoConnect'
+import { mongoConnect } from '@am92/mongo-odm'
 await mongoConnect()
 ```
 
@@ -70,14 +70,16 @@ await mongoConnect()
 
 ## Creating a Collection Schema
 ```javascript
-import mongoSchemaWrapper from '@am92/mongo-odm/mongoSchemaWrapper'
+import { mongoSchemaWrapper } from '@am92/mongo-odm'
 
 const CollectionSchemaObject = {
-    // Schema Properties as defined by mongoose Schema Class
+  // Schema Properties as defined by mongoose Schema Class
 }
-const options = {}
 
-const CollectionSchema = mongoSchemaWrapper(CollectionSchemaObject, options)
+const schemaOptions = {}  // Schema Options as defined by mongoose Schema Class
+
+const CollectionSchema = mongoSchemaWrapper(CollectionSchemaObject, schemaOptions)
+
 export default CollectionSchema
 ```
 mongoSchemaWrapper() returns an instance of mongoose Schema Class.
@@ -88,7 +90,7 @@ mongoSchemaWrapper() returns an instance of mongoose Schema Class.
 
 #### Using mongoose Schema Class
 ```javascript
-import { Schema } from '@am92/mongo-odm/mongoose'
+import { Schema } from '@am92/mongo-odm'
 
 const SubDocumentSchema = new Schema({
   // Schema Properties as defined by mongoose Schema Class
@@ -99,12 +101,20 @@ export default SubDocumentSchema
 
 <br />
 
+#### Using mongoose from @am92/mongo-odm
+```javascript
+import mongoose, { Schema, Types, ObjectId } from '@am92/mongo-odm'
+```
+
+<br />
+
 ## Creating a Collection Model
 ```javascript
-import MongoModel from '@am92/mongo-odm/MongoModel'
+import { MongoModel } from '@am92/mongo-odm'
 import CollectionSchema from './CollectionSchema.mjs'
 
 const CollectionODM = new MongoModel('Collection', CollectionSchema)
+
 export default CollectionODM
 ```
 
