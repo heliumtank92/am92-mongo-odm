@@ -24,9 +24,8 @@ This package provides the following functionalities:
 * [Connecting to MongoDB](#connecting-to-mongodb)
 * [Creating a Collection Schema](#creating-a-collection-schema)
 * [Creating a Collection Model](#creating-a-collection-model)
-    * [Properties of MongoModel Instance](#properties-of-mongomodel-instance)
-    * [Methods of MongoModel Instance](#methods-of-mongomodel-instance)
-* [Resources](#resources)
+    * [Properties of Model Instance](#properties-of-model-instance)
+    * [Methods of Model Instance](#methods-of-mongomodel-instance)
 * [Resources](#resources)
 * [License](#license)
 
@@ -60,7 +59,7 @@ export MONGO_POOL_SIZE=5
 <br />
 
 ## Connecting to MongoDB
-MongoDB needs to be connected before the 'MongoModel' methods can executed. The connection can be established as shown below:
+MongoDB needs to be connected before the 'Model' methods can executed. The connection can be established as shown below:
 ```javascript
 import { mongoConnect } from '@am92/mongo-odm'
 await mongoConnect()
@@ -70,7 +69,7 @@ await mongoConnect()
 
 ## Creating a Collection Schema
 ```javascript
-import { mongoSchemaWrapper } from '@am92/mongo-odm'
+import { buildSchema } from '@am92/mongo-odm'
 
 const CollectionSchemaObject = {
   // Schema Properties as defined by mongoose Schema Class
@@ -78,13 +77,13 @@ const CollectionSchemaObject = {
 
 const schemaOptions = {}  // Schema Options as defined by mongoose Schema Class
 
-const CollectionSchema = mongoSchemaWrapper(CollectionSchemaObject, schemaOptions)
+const CollectionSchema = buildSchema(CollectionSchemaObject, schemaOptions)
 
 export default CollectionSchema
 ```
-mongoSchemaWrapper() returns an instance of mongoose Schema Class.
+buildSchema() returns an instance of mongoose Schema Class.
 
-*Note: The 'options' object properties to be used is as defined by mongoose Schema Class. By default, mongoSchemaWrapper adds 'timestamps: true' option which can be overriden if needed. You may avoid passing the 'options' object if no extra options are required for a given Schema.*
+*Note: The 'options' object properties to be used is as defined by mongoose Schema Class. By default, buildSchema adds 'timestamps: true' option which can be overriden if needed. You may avoid passing the 'options' object if no extra options are required for a given Schema.*
 
 <br />
 
@@ -110,17 +109,17 @@ import mongoose, { Schema, Types, ObjectId } from '@am92/mongo-odm'
 
 ## Creating a Collection Model
 ```javascript
-import { MongoModel } from '@am92/mongo-odm'
+import { Model } from '@am92/mongo-odm'
 import CollectionSchema from './CollectionSchema.mjs'
 
-const CollectionODM = new MongoModel('Collection', CollectionSchema)
+const CollectionODM = new Model('Collection', CollectionSchema)
 
 export default CollectionODM
 ```
 
 <br />
 
-### Properties of MongoModel Instance
+### Properties of Model Instance
 | Properties                  | Description                |
 | :-------------------------- | :------------------------- |
 | CollectionODM.ModelName     | Name of the Model          |
@@ -129,7 +128,7 @@ export default CollectionODM
 
 <br />
 
-### Methods of MongoModel Instance
+### Methods of Model Instance
 | Method                                                                              | Description                                                                               |
 | :---------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------- |
 | [CollectionODM.getCount](#collectionodmgetcountquery)                               | Returns the count of Documents                                                            |

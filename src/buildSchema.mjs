@@ -9,7 +9,7 @@ const DEFAULT_OPTIONS = {
   timestamps: true
 }
 
-export default function mongoSchemaWrapper (schemaObject, options = {}) {
+export default function buildSchema (schemaObject, options = {}) {
   const schemaOptions = { ...DEFAULT_OPTIONS, ...options }
 
   // Additional Feature: writeConcern.w = 'all'

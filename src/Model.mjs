@@ -6,7 +6,7 @@ import {
   DEFAULT_SORT
 } from './CONSTANTS.mjs'
 
-export default class MongoModel {
+export default class Model {
   constructor (modelName = '', Schema) {
     this.ModelName = modelName
     this.Schema = Schema
