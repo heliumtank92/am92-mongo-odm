@@ -9,7 +9,6 @@ import {
 export default class Model {
   constructor (modelName = '', Schema) {
     this.ModelName = modelName
-    this.Schema = Schema
     this.MongooseModel = mongoose.model(modelName, Schema)
 
     // Method Hard Binding

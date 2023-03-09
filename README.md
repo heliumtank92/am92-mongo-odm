@@ -120,11 +120,10 @@ export default CollectionODM
 <br />
 
 ### Properties of Model Instance
-| Properties                  | Description                |
-| :-------------------------- | :------------------------- |
-| CollectionODM.ModelName     | Name of the Model          |
-| CollectionODM.Schema        | mongoose Collection Schema |
-| CollectionODM.MongooseModel | mongoose Model instance    |
+| Properties                  | Description             |
+| :-------------------------- | :---------------------- |
+| CollectionODM.ModelName     | Name of the Model       |
+| CollectionODM.MongooseModel | mongoose Model instance |
 
 <br />
 
