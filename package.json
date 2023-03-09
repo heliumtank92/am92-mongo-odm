@@ -1,15 +1,29 @@
 {
   "name": "@am92/mongo-odm",
-  "version": "1.0.15",
+  "version": "1.1.4",
   "description": "Mongo DB ODM (Object Document Mapper)",
-  "types": "module",
-  "main": "src/MongoModel.mjs",
-  "module": "src/MongoModel.mjs",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.mts",
+      "import": "./src/index.mjs"
+    }
+  },
+  "types": "./types/index.d.mts",
+  "module": "./src/index.mjs",
+  "main": "./src/index.mjs",
+  "dependencies": {
+    "mongoose": "^6.9.2",
+    "mongoose-lean-getters": "^0.4.0",
+    "mongoose-lean-virtuals": "^0.9.1"
+  },
   "scripts": {
     "test": "echo 'Error: no test specified'",
+    "generate:types": "rm -rf types && npx -p typescript tsc",
     "preversion": "pnpm test",
     "version": "echo 'Versioning'",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags && npm run publish:pkg",
+    "publish:pkg": "npm publish"
   },
   "repository": "git@github.com:heliumtank92/am92-mongo-odm.git",
   "homepage": "https://github.com/heliumtank92/am92-mongo-odm#readme",
@@ -26,16 +40,8 @@
     }
   ],
   "license": "MIT",
-  "exports": {
-    "./mongoConnect": "./src/mongoConnect.mjs",
-    "./mongoSchemaWrapper": "./src/mongoSchemaWrapper.mjs",
-    "./MongoModel": "./src/MongoModel.mjs",
-    "./MongoError": "./src/MongoError.mjs",
-    "./mongoose": "./src/mongoose.mjs"
-  },
-  "dependencies": {
-    "mongoose": "^6.8.2",
-    "mongoose-lean-virtuals": "^0.9.1"
+  "publishConfig": {
+    "access": "public"
   },
   "keywords": [
     "mongo",
