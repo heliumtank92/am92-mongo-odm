@@ -13,7 +13,7 @@
   "module": "./src/index.mjs",
   "main": "./src/index.mjs",
   "dependencies": {
-    "mongoose": "^6.9.2",
+    "mongoose": "^7.3.4",
     "mongoose-lean-getters": "^0.4.0",
     "mongoose-lean-virtuals": "^0.9.1"
   },
