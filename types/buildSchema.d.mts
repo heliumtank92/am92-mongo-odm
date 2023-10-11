@@ -22,7 +22,9 @@
 /// <reference types="mongoose/types/validation.js" />
 /// <reference types="mongoose/types/virtuals.js" />
 /// <reference types="mongoose/types/inferschematype.js" />
-export default function buildSchema(schemaObject: any, options?: {}): Schema<any, import("mongoose").Model<any, any, any, any, any>, {}, {}, {}, {}, import("mongoose").ResolveSchemaOptions<{
+export default function buildSchema(schemaObject: any, options?: {}): Schema<any, import("mongoose").Model<any, any, any, any, any, any>, {}, {}, {}, {}, {
     timestamps: boolean;
-}>, any>;
+}, any, import("mongoose").Document<unknown, {}, import("mongoose").FlatRecord<any>> & import("mongoose").FlatRecord<any> & Required<{
+    _id: unknown;
+}>>;
 import { Schema } from "mongoose";

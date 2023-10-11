@@ -1,8 +1,7 @@
 export default class Model {
     constructor(modelName: string, Schema: any);
     ModelName: string;
-    Schema: any;
-    MongooseModel: mongoose.Model<any, unknown, unknown, unknown, any>;
+    MongooseModel: mongoose.Model<any, unknown, unknown, unknown, any, any>;
     getCount(query?: {}): Promise<number>;
     createOne(attrs?: {}, options?: {}): Promise<any>;
     createMany(attrs?: any[], options?: {}): Promise<any[]>;
@@ -13,11 +12,11 @@ export default class Model {
     findOneBy(key: string, value: any, projection?: {}, options?: {}): Promise<any>;
     findManyBy(key: string, value: any, projection?: {}, options?: {}): Promise<any[]>;
     updateOne(query?: {}, updateObj?: {}, options?: {}): Promise<any>;
-    updateMany(query?: {}, updateObj?: {}, options?: {}): Promise<import(".pnpm/mongodb@4.13.0/node_modules/mongodb").UpdateResult>;
+    updateMany(query?: {}, updateObj?: {}, options?: {}): Promise<mongoose.UpdateWriteOpResult>;
     updateById(id?: string, updateObj?: {}, options?: {}): Promise<any>;
     updateOneBy(key: string, value: any, updateObj?: {}, options?: {}): Promise<any>;
-    updateManyBy(key: string, value: any, updateObj?: {}, options?: {}): Promise<import(".pnpm/mongodb@4.13.0/node_modules/mongodb").UpdateResult>;
-    remove(query?: {}, options?: {}): Promise<import(".pnpm/mongodb@4.13.0/node_modules/mongodb").DeleteResult>;
+    updateManyBy(key: string, value: any, updateObj?: {}, options?: {}): Promise<mongoose.UpdateWriteOpResult>;
+    remove(query?: {}, options?: {}): Promise<mongoose.mongo.DeleteResult>;
     removeById(id?: string, options?: {}): Promise<any>;
     list(projection?: {}, options?: {}): Promise<any[]>;
     search(query?: {}, projections?: {}, options?: {}): Promise<{

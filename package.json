@@ -1,6 +1,6 @@
 {
   "name": "@am92/mongo-odm",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "Mongo DB ODM (Object Document Mapper)",
   "type": "module",
   "exports": {
@@ -13,8 +13,8 @@
   "module": "./src/index.mjs",
   "main": "./src/index.mjs",
   "dependencies": {
-    "mongoose": "^6.9.2",
-    "mongoose-lean-getters": "^0.4.0",
+    "mongoose": "^7.6.1",
+    "mongoose-lean-getters": "^1.1.0",
     "mongoose-lean-virtuals": "^0.9.1"
   },
   "scripts": {
