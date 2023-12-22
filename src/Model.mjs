@@ -1,13 +1,9 @@
 import mongoose from 'mongoose'
 import MongoError from './MongoError.mjs'
-import {
-  DEFAULT_SKIP,
-  DEFAULT_LIMIT,
-  DEFAULT_SORT
-} from './CONSTANTS.mjs'
+import { DEFAULT_SKIP, DEFAULT_LIMIT, DEFAULT_SORT } from './CONSTANTS.mjs'
 
 export default class Model {
-  constructor (modelName = '', Schema) {
+  constructor(modelName = '', Schema) {
     this.ModelName = modelName
     this.MongooseModel = mongoose.model(modelName, Schema)
 
@@ -38,7 +34,7 @@ export default class Model {
     this.aggregate = this.aggregate.bind(this)
   }
 
-  async getCount (query = {}) {
+  async getCount(query = {}) {
     try {
       const count = await this.MongooseModel.count(query)
       return count
@@ -47,12 +43,14 @@ export default class Model {
     }
   }
 
-  async createOne (attrs = {}, options = {}) {
+  async createOne(attrs = {}, options = {}) {
     try {
       const { lean = { virtuals: true } } = options
       const document = await this.MongooseModel.create(attrs)
 
-      if (!lean) { return document }
+      if (!lean) {
+        return document
+      }
 
       const isLeanObject = typeof lean === 'object' && !(lean instanceof Array)
       const object = document.toObject((isLeanObject && lean) || {})
@@ -62,53 +60,83 @@ export default class Model {
     }
   }
 
-  async createMany (attrs = [], options = {}) {
-    if (!attrs.length) { return [] }
+  async createMany(attrs = [], options = {}) {
+    if (!attrs.length) {
+      return []
+    }
 
     try {
       const { lean = { virtuals: true }, ...createOptions } = options
       const documents = await this.MongooseModel.create(attrs, createOptions)
 
-      if (!lean) { return documents }
+      if (!lean) {
+        return documents
+      }
 
       const isLeanObject = typeof lean === 'object' && !(lean instanceof Array)
-      const objects = documents.map((document) => document.toObject((isLeanObject && lean) || {}))
+      const objects = documents.map(document =>
+        document.toObject((isLeanObject && lean) || {})
+      )
       return objects
     } catch (error) {
       throw new MongoError(error)
     }
   }
 
-  async replaceAll (attrs = []) {
+  async replaceAll(attrs = []) {
     await this.remove({})
     const objects = await this.createMany(attrs)
     return objects
   }
 
-  async findOne (query = {}, projection = {}, options = {}) {
+  async findOne(query = {}, projection = {}, options = {}) {
     try {
-      const findOptions = { lean: { virtuals: true, getters: true }, ...options, sanitizeProjection: true }
-      const object = await this.MongooseModel.findOne(query, projection, findOptions)
+      const findOptions = {
+        lean: { virtuals: true, getters: true },
+        ...options,
+        sanitizeProjection: true
+      }
+      const object = await this.MongooseModel.findOne(
+        query,
+        projection,
+        findOptions
+      )
       return object
     } catch (error) {
       throw new MongoError(error)
     }
   }
 
-  async findMany (query = {}, projection = {}, options = {}) {
+  async findMany(query = {}, projection = {}, options = {}) {
     try {
-      const findOptions = { lean: { virtuals: true, getters: true }, ...options, sanitizeProjection: true }
-      const objects = await this.MongooseModel.find(query, projection, findOptions)
+      const findOptions = {
+        lean: { virtuals: true, getters: true },
+        ...options,
+        sanitizeProjection: true
+      }
+      const objects = await this.MongooseModel.find(
+        query,
+        projection,
+        findOptions
+      )
       return objects
     } catch (error) {
       throw new MongoError(error)
     }
   }
 
-  async findById (id = '', projections = {}, options = {}) {
+  async findById(id = '', projections = {}, options = {}) {
     try {
-      const findOptions = { lean: { virtuals: true, getters: true }, ...options, sanitizeProjection: true }
-      const object = await this.MongooseModel.findById(id, projections, findOptions)
+      const findOptions = {
+        lean: { virtuals: true, getters: true },
+        ...options,
+        sanitizeProjection: true
+      }
+      const object = await this.MongooseModel.findById(
+        id,
+        projections,
+        findOptions
+      )
 
       if (!object) {
         const error = {
@@ -125,41 +153,75 @@ export default class Model {
     }
   }
 
-  async findOneBy (key = '', value, projection = {}, options = {}) {
+  async findOneBy(key = '', value, projection = {}, options = {}) {
     const query = { [key]: value }
     const object = await this.findOne(query, projection, options)
     return object
   }
 
-  async findManyBy (key = '', value, projection = {}, options = {}) {
+  async findManyBy(key = '', value, projection = {}, options = {}) {
     const query = { [key]: value }
     const objects = await this.findMany(query, projection, options)
     return objects
   }
 
-  async updateOne (query = {}, updateObj = {}, options = {}) {
+  async updateOne(query = {}, updateObj = {}, options = {}) {
     try {
-      const updateOptions = { new: true, rawResult: false, lean: { virtuals: true, getters: true }, ...options, sanitizeProjection: true }
-      const updateResponse = await this.MongooseModel.findOneAndUpdate(query, updateObj, updateOptions).orFail()
+      const updateOptions = {
+        new: true,
+        rawResult: false,
+        lean: { virtuals: true, getters: true },
+        ...options,
+        sanitizeProjection: true
+      }
+      const updateResponse = await this.MongooseModel.findOneAndUpdate(
+        query,
+        updateObj,
+        updateOptions
+      ).orFail()
       return updateResponse
     } catch (error) {
       throw new MongoError(error)
     }
   }
 
-  async updateMany (query = {}, updateObj = {}, options = {}) {
+  async updateMany(query = {}, updateObj = {}, options = {}) {
     try {
-      const updateResponse = await this.MongooseModel.updateMany(query, updateObj, options).orFail()
+      const updateResponse = await this.MongooseModel.updateMany(
+        query,
+        updateObj,
+        options
+      ).orFail()
       return updateResponse
     } catch (error) {
       throw new MongoError(error)
     }
   }
 
-  async updateById (id = '', updateObj = {}, options = {}) {
+  async updateById(id = '', updateObj = {}, options = {}) {
     try {
-      const updateOptions = { new: true, rawResult: false, lean: { virtuals: true, getters: true }, ...options, sanitizeProjection: true }
-      const updateResponse = await this.MongooseModel.findByIdAndUpdate(id, updateObj, updateOptions)
+      const updateOptions = {
+        new: true,
+        rawResult: false,
+        lean: { virtuals: true, getters: true },
+        ...options,
+        sanitizeProjection: true
+      }
+      const updateResponse = await this.MongooseModel.findByIdAndUpdate(
+        id,
+        updateObj,
+        updateOptions
+      )
+
+      if (updateResponse) {
+        const error = {
+          message: 'Document Not Found',
+          name: 'DocumentNotFoundError',
+          errors: { id, options }
+        }
+        throw new MongoError(error)
+      }
+
       const { value } = updateResponse
       const object = (updateOptions.rawResult && value) || updateResponse
 
@@ -178,19 +240,19 @@ export default class Model {
     }
   }
 
-  async updateOneBy (key = '', value, updateObj = {}, options = {}) {
+  async updateOneBy(key = '', value, updateObj = {}, options = {}) {
     const query = { [key]: value }
     const object = await this.updateOne(query, updateObj, options)
     return object
   }
 
-  async updateManyBy (key = '', value, updateObj = {}, options = {}) {
+  async updateManyBy(key = '', value, updateObj = {}, options = {}) {
     const query = { [key]: value }
     const objects = await this.updateMany(query, updateObj, options)
     return objects
   }
 
-  async remove (query = {}, options = {}) {
+  async remove(query = {}, options = {}) {
     try {
       const removeResponse = await this.MongooseModel.deleteMany(query, options)
       return removeResponse
@@ -199,22 +261,30 @@ export default class Model {
     }
   }
 
-  async removeById (id = '', options = {}) {
+  async removeById(id = '', options = {}) {
     try {
-      const removeOptions = { rawResult: false, lean: { virtuals: true, getters: true }, ...options, sanitizeProjection: true }
-      const removeResponse = await this.MongooseModel.findByIdAndRemove(id, removeOptions).orFail()
+      const removeOptions = {
+        rawResult: false,
+        lean: { virtuals: true, getters: true },
+        ...options,
+        sanitizeProjection: true
+      }
+      const removeResponse = await this.MongooseModel.findByIdAndRemove(
+        id,
+        removeOptions
+      ).orFail()
       return removeResponse
     } catch (error) {
       throw new MongoError(error)
     }
   }
 
-  async list (projection = {}, options = {}) {
+  async list(projection = {}, options = {}) {
     const objects = await this.findMany({}, projection, options)
     return objects
   }
 
-  async search (query = {}, projections = {}, options = {}) {
+  async search(query = {}, projections = {}, options = {}) {
     const searchOptions = {
       skip: options.skip || DEFAULT_SKIP,
       limit: options.limit || DEFAULT_LIMIT,
@@ -230,7 +300,9 @@ export default class Model {
     const countError = countResponse.status === 'rejected'
     const findError = findResponse.status === 'rejected'
 
-    if (findError) { throw findResponse.reason }
+    if (findError) {
+      throw findResponse.reason
+    }
 
     const { value: count } = countResponse
     const { value: objects } = findResponse
@@ -244,7 +316,7 @@ export default class Model {
     return data
   }
 
-  async aggregate (pipeline = []) {
+  async aggregate(pipeline = []) {
     try {
       const result = this.MongooseModel.aggregate(pipeline)
       return result
