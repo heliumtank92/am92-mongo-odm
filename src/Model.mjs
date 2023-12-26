@@ -213,7 +213,7 @@ export default class Model {
         updateOptions
       )
 
-      if (updateResponse) {
+      if (!updateResponse) {
         const error = {
           message: 'Document Not Found',
           name: 'DocumentNotFoundError',
