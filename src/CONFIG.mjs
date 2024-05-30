@@ -22,7 +22,8 @@ const {
   MONGO_PEM_PATH = '',
 
   // Other Details
-  MONGO_POOL_SIZE = '5'
+  MONGO_MIN_POOL_SIZE = '0',
+  MONGO_MAX_POOL_SIZE = '100'
 } = process.env
 
 const SERVICE = `${pkgName}@${pkgVersion}`
@@ -33,13 +34,11 @@ const SSL_ENABLED = MONGO_SSL_ENABLED === 'true'
 const SSL_VALIDATE = MONGO_SSL_VALIDATE === 'true'
 
 const MISSING_CONFIG = []
-const REQUIRED_CONFIG = [
-  'MONGO_DBNAME',
-  'MONGO_HOSTS'
-]
+const REQUIRED_CONFIG = ['MONGO_DBNAME', 'MONGO_HOSTS']
 const INT_CONFIGS = {
   MONGO_REPLICASET_COUNT,
-  MONGO_POOL_SIZE
+  MONGO_MIN_POOL_SIZE,
+  MONGO_MAX_POOL_SIZE
 }
 const INVALID_INT_CONFIG = {}
 
@@ -59,7 +58,11 @@ REQUIRED_CONFIG.forEach(key => {
 })
 
 if (MISSING_CONFIG.length) {
-  logFunc(`[${SERVICE} MongoOdm] MongoOdm Config Missing: ${MISSING_CONFIG.join(', ')}`)
+  logFunc(
+    `[${SERVICE} MongoOdm] MongoOdm Config Missing: ${MISSING_CONFIG.join(
+      ', '
+    )}`
+  )
   process.exit(1)
 }
 
@@ -73,11 +76,16 @@ Object.keys(INT_CONFIGS).forEach(key => {
 })
 
 if (Object.keys(INVALID_INT_CONFIG).length) {
-  logFunc(`[${SERVICE} MongoOdm] Invalid MongoOdm Integer Configs:`, INVALID_INT_CONFIG)
+  logFunc(
+    `[${SERVICE} MongoOdm] Invalid MongoOdm Integer Configs:`,
+    INVALID_INT_CONFIG
+  )
   process.exit(1)
 }
 
-const MONGO_CREDENTIALS = USER_AUTH && (encodeURIComponent(MONGO_USERNAME) + ':' + encodeURIComponent(MONGO_PASSWORD))
+const MONGO_CREDENTIALS =
+  USER_AUTH &&
+  encodeURIComponent(MONGO_USERNAME) + ':' + encodeURIComponent(MONGO_PASSWORD)
 const CONNECTION_URI = USER_AUTH
   ? `mongodb://${MONGO_CREDENTIALS}@${MONGO_HOSTS}/${MONGO_DBNAME}`
   : `mongodb://${MONGO_HOSTS}/${MONGO_DBNAME}`
@@ -95,7 +103,8 @@ const CONFIG = {
   CONNECTION_URI,
   REPLICASET_COUNT: INT_CONFIGS.MONGO_REPLICASET_COUNT,
   OPTIONS: {
-    maxPoolSize: INT_CONFIGS.MONGO_POOL_SIZE,
+    minPoolSize: INT_CONFIGS.MONGO_MIN_POOL_SIZE,
+    maxPoolSize: INT_CONFIGS.MONGO_MAX_POOL_SIZE,
     retryWrites: false,
     replicaSet: MONGO_REPLICASET || undefined,
     readPreference: MONGO_READ_PREFERENCE,
