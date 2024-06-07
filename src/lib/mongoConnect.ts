@@ -1,17 +1,20 @@
-import mongoose from 'mongoose'
-import CONFIG, { SERVICE } from './CONFIG.mjs'
+import mongoose, { ConnectOptions } from 'mongoose'
+import CONFIG, { SERVICE } from '../CONFIG'
 
 const { CONNECTION_URI, OPTIONS } = CONFIG
 
-const mongoConnect = async () => {
+export const mongoConnect = async (connectOptions?: ConnectOptions) => {
   if (process.env.NODE_ENV !== 'production') {
-    console.debug(`[${SERVICE} MongoOdm] Mongoose Debug Mode Enabled for Non-Production Mode.`)
+    console.debug(
+      `[${SERVICE} MongoOdm] Mongoose Debug Mode Enabled for Non-Production Mode.`
+    )
   }
-  console.info(`[${SERVICE} MongoOdm] Establishing MongoDB Connection...`)
-  await mongoose.connect(CONNECTION_URI, OPTIONS)
-}
 
-export default mongoConnect
+  console.info(`[${SERVICE} MongoOdm] Establishing MongoDB Connection...`)
+
+  const thisConnectOptions = { ...connectOptions, ...OPTIONS }
+  await mongoose.connect(CONNECTION_URI, thisConnectOptions)
+}
 
 mongoose.set('strictQuery', true)
 
@@ -33,10 +36,12 @@ mongoose.connection.on('close', () => {
   console.info(`[${SERVICE} MongoOdm] MongoDB Connection Closed`)
 })
 
-mongoose.connection.on('error', (error) => {
+mongoose.connection.on('error', error => {
   const logFunc = console.fatal || console.error
   logFunc(`[${SERVICE} MongoOdm] MongoDB Connection Error`, error)
   process.exit(1)
 })
 
-if (process.env.NODE_ENV !== 'production') { mongoose.set('debug', true) }
+if (process.env.NODE_ENV !== 'production') {
+  mongoose.set('debug', true)
+}
