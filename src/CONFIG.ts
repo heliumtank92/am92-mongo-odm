@@ -112,9 +112,10 @@ const MONGO_CREDENTIALS =
   encodeURIComponent(MONGO_USERNAME) + ':' + encodeURIComponent(MONGO_PASSWORD)
 
 /** @ignore */
-const CONNECTION_URI = USER_AUTH
-  ? `mongodb://${MONGO_CREDENTIALS}@${MONGO_HOSTS}/${MONGO_DBNAME}`
-  : `mongodb://${MONGO_HOSTS}/${MONGO_DBNAME}`
+const CONNECTION_URI =
+  USER_AUTH && MONGO_CREDENTIALS
+    ? `mongodb://${MONGO_CREDENTIALS}@${MONGO_HOSTS}/${MONGO_DBNAME}`
+    : `mongodb://${MONGO_HOSTS}/${MONGO_DBNAME}`
 
 /** @ignore */
 const SSL_CONFIG = SSL_ENABLED
