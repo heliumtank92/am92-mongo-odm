@@ -1,5 +1,9 @@
-import { ConnectOptions } from 'mongoose'
-import { IntConfigKeys, IntConfigs, MongoConfig } from './TYPES'
+import {
+  IntConfigKeys,
+  IntConfigs,
+  MongoConfig,
+  MongoConnectOptions
+} from './TYPES'
 
 /** @ignore */
 const {
@@ -135,7 +139,8 @@ const CONFIG: MongoConfig = {
     maxPoolSize: INT_CONFIG.MONGO_MAX_POOL_SIZE || 100,
     retryWrites: false,
     replicaSet: MONGO_REPLICASET || undefined,
-    readPreference: MONGO_READ_PREFERENCE as ConnectOptions['readPreference'],
+    readPreference:
+      MONGO_READ_PREFERENCE as MongoConnectOptions['readPreference'],
     ...SSL_CONFIG
   }
 }

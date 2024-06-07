@@ -1,6 +1,6 @@
 import {
   AggregateOptions,
-  ConnectOptions,
+  ConnectOptions as MongoConnectOptions,
   CreateOptions,
   FilterQuery,
   MongooseBaseQueryOptions,
@@ -21,6 +21,8 @@ import {
   UpdateOptions,
   UpdateResult
 } from 'mongodb'
+
+export { MongoConnectOptions }
 
 export {
   Types as MongoTypes,
@@ -50,7 +52,7 @@ export interface MongoConfig {
   DBNAME: string
   CONNECTION_URI: string
   REPLICASET_COUNT: number
-  OPTIONS: ConnectOptions
+  OPTIONS: MongoConnectOptions
 }
 
 export type MongoCountOptions<TRawDocType> =
