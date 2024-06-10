@@ -1,0 +1,683 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Mongo ODM</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
+	   <link rel="stylesheet" href="./styles/style.css">
+        <link rel="stylesheet" href="./styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="./" class="navbar-brand">Mongo ODM</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content getting-started">
+                   <div class="content-data">
+
+<h1>@am92/mongo-odm</h1>
+<p><a href="https://www.npmjs.com/package/@am92/mongo-odm"><img src="https://img.shields.io/npm/v/@am92/mongo-odm?style=for-the-badge" alt="npm version" class="img-responsive"></a>&nbsp;
+<a href="https://nodejs.org/api/esm.html"><img src="https://img.shields.io/badge/ECMAScript-Module%20Only-red?style=for-the-badge" alt="ECMAScript Module" class="img-responsive"></a>&nbsp;
+<a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/npm/l/@am92/mongo-odm?color=yellow&style=for-the-badge" alt="License: MIT" class="img-responsive"></a>&nbsp;
+<a href="https://security.snyk.io/package/npm/@am92%2Fmongo-odm"><img src="https://img.shields.io/snyk/vulnerabilities/npm/@am92/mongo-odm?style=for-the-badge" alt="Vulnerabilities: Snyk" class="img-responsive"></a>&nbsp;
+<a href="https://npm-stat.com/charts.html?package=%40am92%2Fmongo-odm"><img src="https://img.shields.io/npm/dy/@am92/mongo-odm?style=for-the-badge" alt="Downloads" class="img-responsive"></a>
+<a href="https://bundlephobia.com/package/@am92/mongo-odm"><img src="https://img.shields.io/bundlephobia/minzip/@am92/mongo-odm?style=for-the-badge" alt="Bundle Size" class="img-responsive"></a></p>
+<br />
+
+<p>This is an ODM (Object Document Mapping) which provides CRUD functionalities to interact with MongoDB Collections. This package uses <a href="https://www.npmjs.com/package/mongoose">mongoose</a> package using its ^6.8.2 version.</p>
+<p>This package provides the following functionalities:</p>
+<ul>
+<li>MongoDB Connection Helper</li>
+<li>Mongoose Schema Wrapper</li>
+<li>Collection Modeling Class</li>
+</ul>
+<br />
+
+<h2>Table of Content</h2>
+<ul>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#environment-variables">Environment Variables</a></li>
+<li><a href="#connecting-to-mongodb">Connecting to MongoDB</a></li>
+<li><a href="#creating-a-collection-schema">Creating a Collection Schema</a></li>
+<li><a href="#creating-a-collection-model">Creating a Collection Model</a><ul>
+<li><a href="#properties-of-model-instance">Properties of Model Instance</a></li>
+<li><a href="#methods-of-mongomodel-instance">Methods of Model Instance</a></li>
+</ul>
+</li>
+<li><a href="#resources">Resources</a></li>
+<li><a href="#license">License</a></li>
+</ul>
+<br />
+
+<h2>Installation</h2>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-bash">npm install --save &#64;am92/mongo-odm</code></pre></div><br />
+
+<h2>Environment Variables</h2>
+<p>The following environment variables need to be set to work with this package:</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-sh">##### Mongo Config
+export MONGO_HOSTS=
+export MONGO_DBNAME=
+export MONGO_USER_AUTH=false
+export MONGO_USERNAME=
+export MONGO_PASSWORD=
+export MONGO_REPLICASET=
+export MONGO_REPLICASET_COUNT=0
+export MONGO_READ_PREFERENCE=
+export MONGO_SSL_ENABLED=false
+export MONGO_SSL_VALIDATE=false
+export MONGO_PEM_PATH=
+export MONGO_POOL_SIZE=5</code></pre></div><p><em>Note: Do not export variable &#39;MONGO_READ_PREFERENCE&#39; if no value is to be set.</em></p>
+<br />
+
+<h2>Connecting to MongoDB</h2>
+<p>MongoDB needs to be connected before the &#39;Model&#39; methods can executed. The connection can be established as shown below:</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-javascript">import { mongoConnect } from &#39;&#64;am92/mongo-odm&#39;
+await mongoConnect()</code></pre></div><br />
+
+<h2>Creating a Collection Schema</h2>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-javascript">import { buildSchema } from &#39;&#64;am92/mongo-odm&#39;
+
+const CollectionSchemaObject = {
+  // Schema Properties as defined by mongoose Schema Class
+}
+
+const schemaOptions = {}  // Schema Options as defined by mongoose Schema Class
+
+const CollectionSchema = buildSchema(CollectionSchemaObject, schemaOptions)
+
+export default CollectionSchema</code></pre></div><p>buildSchema() returns an instance of mongoose Schema Class.</p>
+<p><em>Note: The &#39;options&#39; object properties to be used is as defined by mongoose Schema Class. By default, buildSchema adds &#39;timestamps: true&#39; option which can be overriden if needed. You may avoid passing the &#39;options&#39; object if no extra options are required for a given Schema.</em></p>
+<br />
+
+<h4>Using mongoose Schema Class</h4>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-javascript">import { Schema } from &#39;&#64;am92/mongo-odm&#39;
+
+const SubDocumentSchema = new Schema({
+  // Schema Properties as defined by mongoose Schema Class
+})
+
+export default SubDocumentSchema</code></pre></div><br />
+
+<h4>Using mongoose from @am92/mongo-odm</h4>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-javascript">import mongoose, { Schema, Types, ObjectId } from &#39;&#64;am92/mongo-odm&#39;</code></pre></div><br />
+
+<h2>Creating a Collection Model</h2>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-javascript">import { Model } from &#39;&#64;am92/mongo-odm&#39;
+import CollectionSchema from &#39;./CollectionSchema.mjs&#39;
+
+const CollectionODM = new Model(&#39;Collection&#39;, CollectionSchema)
+
+export default CollectionODM</code></pre></div><br />
+
+<h3>Properties of Model Instance</h3>
+<table class="table table-bordered compodoc-table">
+<thead>
+<tr>
+<th align="left">Properties</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">CollectionODM.ModelName</td>
+<td align="left">Name of the Model</td>
+</tr>
+<tr>
+<td align="left">CollectionODM.MongooseModel</td>
+<td align="left">mongoose Model instance</td>
+</tr>
+</tbody>
+</table>
+<br />
+
+<h3>Methods of Model Instance</h3>
+<table class="table table-bordered compodoc-table">
+<thead>
+<tr>
+<th align="left">Method</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left"><a href="#collectionodmgetcountquery">CollectionODM.getCount</a></td>
+<td align="left">Returns the count of Documents</td>
+</tr>
+<tr>
+<td align="left"><a href="#collectionodmcreateoneattrs">CollectionODM.createOne</a></td>
+<td align="left">Creates a new Document</td>
+</tr>
+<tr>
+<td align="left"><a href="#collectionodmcreatemanyattrs">CollectionODM.createMany</a></td>
+<td align="left">Creates multiple new Documents</td>
+</tr>
+<tr>
+<td align="left"><a href="#collectionodmreplaceallattrs">CollectionODM.replaceAll</a></td>
+<td align="left">Replaces all Documents with new Documents</td>
+</tr>
+<tr>
+<td align="left"><a href="#collectionodmfindonequery-projection-options">CollectionODM.findOne</a></td>
+<td align="left">Finds and returns a single Document</td>
+</tr>
+<tr>
+<td align="left"><a href="#collectionodmfindmanyquery-projection-options">CollectionODM.findMany</a></td>
+<td align="left">Finds and returns mulitple Documents</td>
+</tr>
+<tr>
+<td align="left"><a href="#collectionodmfindbyidid-projection-options">CollectionODM.findById</a></td>
+<td align="left">Finds using MongoDB ObjectId and returns a single Document</td>
+</tr>
+<tr>
+<td align="left"><a href="#collectionodmfindonebykey-value-projection-options">CollectionODM.findOneBy</a></td>
+<td align="left">Finds using key-value pair and returns a single Document</td>
+</tr>
+<tr>
+<td align="left"><a href="#collectionodmfindmanybykey-value-projection-options">CollectionODM.findManyBy</a></td>
+<td align="left">Finds using key-value pair and returns mulitple Documents</td>
+</tr>
+<tr>
+<td align="left"><a href="">CollectionODM.updateOne</a></td>
+<td align="left">Updates a single Document and returns the Updated Document</td>
+</tr>
+<tr>
+<td align="left"><a href="#collectionodmupdatemanyquery-updateobj-options">CollectionODM.updateMany</a></td>
+<td align="left">Updates multiple Documents and returns the Updated Documents</td>
+</tr>
+<tr>
+<td align="left"><a href="#collectionodmupdatebyidid-updateobj-options">CollectionODM.updateById</a></td>
+<td align="left">Updates a single Document with spcified MongoDB ObjectId and returns the Updated Document</td>
+</tr>
+<tr>
+<td align="left"><a href="#collectionodmupdateonequery-updateobj-options">CollectionODM.updateOneBy</a></td>
+<td align="left">Updates a single Document using key-value pair and returns the Updated Document</td>
+</tr>
+<tr>
+<td align="left"><a href="#collectionodmupdatemanybykey-value-updateobj-options">CollectionODM.updateManyBy</a></td>
+<td align="left">Updates multiple Documents using key-value pair and returns the Updated Documents</td>
+</tr>
+<tr>
+<td align="left"><a href="#collectionodmremovequery-options">CollectionODM.remove</a></td>
+<td align="left">Removes multiple documents and returns the delete response</td>
+</tr>
+<tr>
+<td align="left"><a href="#collectionodmremovebyidid-options">CollectionODM.removeById</a></td>
+<td align="left">Deletes a single Document with spicifed MongoDB ObjectId and returns the Deleted Document</td>
+</tr>
+<tr>
+<td align="left"><a href="#collectionodmlistprojection-options">CollectionODM.list</a></td>
+<td align="left">Returns all the Documents from a given Collection</td>
+</tr>
+<tr>
+<td align="left"><a href="#collectionodmsearchquery-projection-options">CollectionODM.search</a></td>
+<td align="left">Searches and returns Documents from a given Collection</td>
+</tr>
+<tr>
+<td align="left"><a href="#collectionodmaggregatepipeline">CollectionODM.aggregate</a></td>
+<td align="left">Runs mongoose aggregate function</td>
+</tr>
+</tbody>
+</table>
+<br />
+
+<h4>CollectionODM.getCount(query)<br /></h4>
+<h6>Arguments</h6>
+<ul>
+<li>query (Object): mongoose query object</li>
+</ul>
+<h6>Returns</h6>
+<ul>
+<li>count (Number): Number of documents found</li>
+</ul>
+<h6>Example</h6>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-javascript">const count = await CollectionODM.getCount({ ...queryProps })</code></pre></div><br />
+
+<h4>CollectionODM.createOne(attrs)<br /></h4>
+<h6>Arguments</h6>
+<ul>
+<li>attrs (Object): Object as per CollectionSchema</li>
+</ul>
+<h6>Returns</h6>
+<ul>
+<li>document (Object): Created Lean Document</li>
+</ul>
+<h6>Example</h6>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-javascript">const doc = await CollectionODM.createOne({ ...SchemaProps })</code></pre></div><br />
+
+<h4>CollectionODM.createMany(attrs)<br /></h4>
+<h6>Arguments</h6>
+<ul>
+<li>attrs (Array): Array of Object as per CollectionSchema</li>
+</ul>
+<h6>Returns</h6>
+<ul>
+<li>documents (Array): Created Lean Documents Array</li>
+</ul>
+<h6>Example</h6>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-javascript">const docs = await CollectionODM.createMany([{ ...SchemaProps }])</code></pre></div><br />
+
+<h4>CollectionODM.replaceAll(attrs)<br /></h4>
+<h6>Arguments</h6>
+<ul>
+<li>attrs (Array): Array of Object as per CollectionSchema</li>
+</ul>
+<h6>Returns</h6>
+<ul>
+<li>documents (Array): Created Lean Documents Array</li>
+</ul>
+<h6>Example</h6>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-javascript">const docs = await CollectionODM.replaceAll([{ ...SchemaProps }])</code></pre></div><br />
+
+<h4>CollectionODM.findOne(query, projection, options)<br /></h4>
+<h6>Arguments</h6>
+<ul>
+<li>query (Object): mongoose query object</li>
+<li>projection (Object): mongoose projection object</li>
+<li>options (Object): mongoose options object as per &#39;findOne&#39; method</li>
+</ul>
+<h6>Returns</h6>
+<ul>
+<li>document (Object): Lean Document</li>
+</ul>
+<h6>Example</h6>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-javascript">const doc = await CollectionODM.findOne(query, projection, options)</code></pre></div><br />
+
+<h4>CollectionODM.findMany(query, projection, options)<br /></h4>
+<h6>Arguments</h6>
+<ul>
+<li>query (Object): mongoose query object</li>
+<li>projection (Object): mongoose projection object</li>
+<li>options (Object): mongoose options object as per &#39;find&#39; method</li>
+</ul>
+<h6>Returns</h6>
+<ul>
+<li>documents (Array): Lean Documents Array</li>
+</ul>
+<h6>Example</h6>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-javascript">const docs = await CollectionODM.findMany(query, projection, options)</code></pre></div><br />
+
+<h4>CollectionODM.findById(id, projection, options)<br /></h4>
+<h6>Arguments</h6>
+<ul>
+<li>id (String): mongoose Document &#39;_id&#39; Value</li>
+<li>projection (Object): mongoose projection object</li>
+<li>options (Object): mongoose options object as per &#39;findById&#39; method</li>
+</ul>
+<h6>Returns</h6>
+<ul>
+<li>document (Object): Found Lean Document</li>
+</ul>
+<h6>Example</h6>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-javascript">const doc = await CollectionODM.findById(id, projection, options)</code></pre></div><br />
+
+<h4>CollectionODM.findOneBy(key, value, projection, options)<br /></h4>
+<h6>Arguments</h6>
+<ul>
+<li>key (String): mongoose Document Property Name</li>
+<li>value (any): mongoose Document Property Query Value</li>
+<li>projection (Object): mongoose projection object</li>
+<li>options (Object): mongoose options object as per &#39;findOne&#39; method</li>
+</ul>
+<h6>Returns</h6>
+<ul>
+<li>document (Object): Found Lean Document</li>
+</ul>
+<h6>Example</h6>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-javascript">const doc = await CollectionODM.findOneBy(key, value, projection, options)</code></pre></div><br />
+
+<h4>CollectionODM.findManyBy(key, value, projection, options)<br /></h4>
+<h6>Arguments</h6>
+<ul>
+<li>key (String): mongoose Document Property Name</li>
+<li>value (any): mongoose Document Property Query Value</li>
+<li>projection (Object): mongoose projection object</li>
+<li>options (Object): mongoose options object as per &#39;findOne&#39; method</li>
+</ul>
+<h6>Returns</h6>
+<ul>
+<li>documents (Array): Found Lean Documents Array</li>
+</ul>
+<h6>Example</h6>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-javascript">const doc = await CollectionODM.findManyBy(key, value, projection, options)</code></pre></div><br />
+
+<h4>CollectionODM.updateOne(query, updateObj, options)<br /></h4>
+<h6>Arguments</h6>
+<ul>
+<li>query (Object): mongoose query object</li>
+<li>updateObj (Object): mongoose update object</li>
+<li>options (Object): mongoose options object as per &#39;findOneAndUpdate&#39; method</li>
+</ul>
+<h6>Returns</h6>
+<ul>
+<li>document (Object): Updated Lean Document</li>
+</ul>
+<h6>Example</h6>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-javascript">const updatedDoc = await CollectionODM.updateOne(query, updateObj, options)</code></pre></div><br />
+
+<h4>CollectionODM.updateMany(query, updateObj, options)<br /></h4>
+<h6>Arguments</h6>
+<ul>
+<li>query (Object): mongoose query object</li>
+<li>updateObj (Object): mongoose update object</li>
+<li>options (Object): mongoose options object as per &#39;updateMany&#39; method</li>
+</ul>
+<h6>Returns</h6>
+<ul>
+<li>documents (Array): Updated Lean Documents Array</li>
+</ul>
+<h6>Example</h6>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-javascript">const updatedDocs = await CollectionODM.updateMany(query, updateObj, options)</code></pre></div><br />
+
+<h4>CollectionODM.updateById(id, updateObj, options)<br /></h4>
+<h6>Arguments</h6>
+<ul>
+<li>id (String): mongoose Document &#39;_id&#39; Value</li>
+<li>updateObj (Object): mongoose update object</li>
+<li>options (Object): mongoose options object as per &#39;findByIdAndUpdate&#39; method</li>
+</ul>
+<h6>Returns</h6>
+<ul>
+<li>document (Object): Updated Lean Document</li>
+</ul>
+<h6>Example</h6>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-javascript">const updatedDoc = await CollectionODM.updateById(id, updateObj, options)</code></pre></div><br />
+
+<h4>CollectionODM.updateOneBy(key, value, updateObj, options)<br /></h4>
+<h6>Arguments</h6>
+<ul>
+<li>key (String): mongoose Document Property Name</li>
+<li>value (any): mongoose Document Property Query Value</li>
+<li>updateObj (Object): mongoose update object</li>
+<li>options (Object): mongoose options object as per &#39;findOneAndUpdate&#39; method</li>
+</ul>
+<h6>Returns</h6>
+<ul>
+<li>document (Object): Updated Lean Document</li>
+</ul>
+<h6>Example</h6>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-javascript">const updatedDoc = await CollectionODM.updateOneBy(key, value, updateObj, options)</code></pre></div><br />
+
+<h4>CollectionODM.updateManyBy(key, value, updateObj, options)<br /></h4>
+<h6>Arguments</h6>
+<ul>
+<li>key (String): mongoose Document Property Name</li>
+<li>value (any): mongoose Document Property Query Value</li>
+<li>updateObj (Object): mongoose update object</li>
+<li>options (Object): mongoose options object as per &#39;updateMany&#39; method</li>
+</ul>
+<h6>Returns</h6>
+<ul>
+<li>documents (Array): Updated Lean Documents Array</li>
+</ul>
+<h6>Example</h6>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-javascript">const updatedDocs = await CollectionODM.updateManyBy(key, value, updateObj, options)</code></pre></div><br />
+
+<h4>CollectionODM.remove(query, options)<br /></h4>
+<h6>Arguments</h6>
+<ul>
+<li>query (Object): mongoose query object</li>
+<li>options (Object): mongoose options object as per &#39;deleteMany&#39; method</li>
+</ul>
+<h6>Returns</h6>
+<ul>
+<li>removeResponse (Object): // TODO</li>
+</ul>
+<h6>Example</h6>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-javascript">const removeResponse = await CollectionODM.remove(query, options)</code></pre></div><br />
+
+<h4>CollectionODM.removeById(id, options)<br /></h4>
+<h6>Arguments</h6>
+<ul>
+<li>id (String): mongoose Document &#39;_id&#39; Value</li>
+<li>options (Object): mongoose options object as per &#39;findByIdAndRemove&#39; method</li>
+</ul>
+<h6>Returns</h6>
+<ul>
+<li>document (Object): Deleted Lean Document</li>
+</ul>
+<h6>Example</h6>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-javascript">const doc = await CollectionODM.removeById(id, options)</code></pre></div><br />
+
+<h4>CollectionODM.list(projection, options)<br /></h4>
+<h6>Arguments</h6>
+<ul>
+<li>projection (Object): mongoose projection object</li>
+<li>options (Object): mongoose options object as per &#39;find&#39; method</li>
+</ul>
+<h6>Returns</h6>
+<ul>
+<li>documents (Array): Found Lean Documents Array</li>
+</ul>
+<h6>Example</h6>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-javascript">const docs = await CollectionODM.list(projection, options)</code></pre></div><br />
+
+<h4>CollectionODM.search(query, projection, options)<br /></h4>
+<h6>Arguments</h6>
+<ul>
+<li>query (Object): mongoose query object</li>
+<li>projection (Object): mongoose projection object</li>
+<li>options (Object): mongoose options object as per &#39;find&#39; method</li>
+</ul>
+<h6>Returns</h6>
+<ul>
+<li>responseData (Object): Found Lean Documents Array with Counts<b>Example :</b><div><pre class="line-numbers"><code class="language-javascript">{
+  &quot;_meta&quot;: {
+    &quot;totalDocuments&quot;: 0,   // Total number of documents found against the &#39;query&#39;
+    &quot;documentsCount&quot;: 0    // Number of documents found for given pagination options
+  },
+  &quot;documents&quot;: []          // Lean Documents Array
+}</code></pre></div></li>
+</ul>
+<h6>Example</h6>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-javascript">const responseData = await CollectionODM.search(query, projection, options)
+const queryDocsCount = responseData._meta.totalDocuments
+const pageDocsCount = responseData._meta.documentsCount
+const docs = responseData.documents</code></pre></div><br />
+
+<h4>CollectionODM.aggregate(pipeline)<br /></h4>
+<h6>Arguments</h6>
+<ul>
+<li>pipeline (Array): mongoose pipeline array as per &#39;aggregate&#39; method</li>
+</ul>
+<h6>Returns</h6>
+<ul>
+<li>result (Any): Result as per mongoose &#39;aggregate&#39; method</li>
+</ul>
+<h6>Example</h6>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-javascript">const result = await CollectionODM.aggregate(pipeline)</code></pre></div><br />
+
+<h2>Contributors</h2>
+<table>
+  <tbody>
+    <tr>
+      <td align="center">
+        <a href='https://github.com/ankitgandhi452'>
+          <img src="https://avatars.githubusercontent.com/u/8692027?s=400&v=4" width="100px;" alt="Ankit Gandhi"/>
+          <br />
+          <sub><b>Ankit Gandhi</b></sub>
+        </a>
+      </td>
+      <td align="center">
+        <a href='https://github.com/agarwalmehul'>
+          <img src="https://avatars.githubusercontent.com/u/8692023?s=400&v=4" width="100px;" alt="Mehul Agarwal"/>
+          <br />
+          <sub><b>Mehul Agarwal</b></sub>
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<br />
+
+<h2>Resources</h2>
+<ul>
+<li><a href="https://www.npmjs.com/package/mongoose">mongoose</a></li>
+</ul>
+<br />
+
+<h2>License</h2>
+<ul>
+<li><a href="https://opensource.org/licenses/MIT">MIT</a></li>
+</ul>
+<br />
+<br />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 0;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'getting-started';
+            var COMPODOC_CURRENT_PAGE_URL = 'index.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="./js/libs/custom-elements.min.js"></script>
+       <script src="./js/libs/lit-html.js"></script>
+
+       <script src="./js/menu-wc.js" defer></script>
+       <script nomodule src="./js/menu-wc_es5.js" defer></script>
+
+       <script src="./js/libs/bootstrap-native.js"></script>
+
+       <script src="./js/libs/es6-shim.min.js"></script>
+       <script src="./js/libs/EventDispatcher.js"></script>
+       <script src="./js/libs/promise.min.js"></script>
+       <script src="./js/libs/zepto.min.js"></script>
+
+       <script src="./js/compodoc.js"></script>
+
+       <script src="./js/tabs.js"></script>
+       <script src="./js/menu.js"></script>
+       <script src="./js/libs/clipboard.min.js"></script>
+       <script src="./js/libs/prism.js"></script>
+       <script src="./js/sourceCode.js"></script>
+          <script src="./js/search/search.js"></script>
+          <script src="./js/search/lunr.min.js"></script>
+          <script src="./js/search/search-lunr.js"></script>
+          <script src="./js/search/search_index.js"></script>
+       <script src="./js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>
