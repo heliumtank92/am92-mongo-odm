@@ -14,6 +14,7 @@ import {
   MongoQuery,
   MongoQueryOptions,
   MongoSearchQuery,
+  MongoSearchResult,
   MongoToObjOptions,
   MongoUpdateQuery,
   MongoUpdateQueryOptions,
@@ -22,13 +23,39 @@ import {
 import { getLeanOption } from './helpers'
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE, DEFAULT_SORT } from '../CONSTANTS'
 
+/**
+ * A generic model class for interacting with MongoDB collections using Mongoose.
+ *
+ * @export
+ * @class Model
+ * @typedef {Model}
+ * @template TRawDocType
+ * @template {MongoModel<TRawDocType>} [TMongoModel=MongoModel<TRawDocType>]
+ */
 export class Model<
   TRawDocType,
   TMongoModel extends MongoModel<TRawDocType> = MongoModel<TRawDocType>
 > {
+  /**
+   * The name of the model.
+   *
+   * @type {string}
+   */
   ModelName: string
+  /**
+   * The Mongoose model instance.
+   *
+   * @type {TMongoModel}
+   */
   MongoModel: TMongoModel
 
+  /**
+   * Creates an instance of Model.
+   *
+   * @constructor
+   * @param {string} [modelName=''] - The name of the model.
+   * @param {MongoSchema} schema - The schema definition for the model.
+   */
   constructor(modelName: string = '', schema: MongoSchema) {
     this.ModelName = modelName
     this.MongoModel = mongoose.model<TRawDocType, TMongoModel>(
@@ -63,6 +90,16 @@ export class Model<
     this.aggregate = this.aggregate.bind(this)
   }
 
+  /**
+   * Gets the count of documents matching the query.
+   *
+   * @async
+   * @template {MongoQuery<TRawDocType>} TQuery
+   * @template {MongoCountOptions<TRawDocType>} TOptions
+   * @param {?TQuery} [query] The query object.
+   * @param {?TOptions} [options] The options for counting documents.
+   * @returns {Promise<number>} The count of documents.
+   */
   async getCount<
     TQuery extends MongoQuery<TRawDocType>,
     TOptions extends MongoCountOptions<TRawDocType>
@@ -75,6 +112,16 @@ export class Model<
     }
   }
 
+  /**
+   * Creates a single document in the collection.
+   *
+   * @async
+   * @template {Partial<TRawDocType>} TDoc
+   * @template {MongoToObjOptions} TToObjOptions
+   * @param {TDoc} doc The document to create.
+   * @param {?TToObjOptions} [toObjOptions] Options for converting the document to an object.
+   * @returns {Promise<MongoConditionalDoc<InstanceType<typeof this.MongoModel>, TRawDocType, TToObjOptions>>} The created document.
+   */
   async createOne<
     TDoc extends Partial<TRawDocType>,
     TToObjOptions extends MongoToObjOptions
@@ -110,6 +157,18 @@ export class Model<
     }
   }
 
+  /**
+   * Creates multiple documents in the collection.
+   *
+   * @async
+   * @template {Partial<TRawDocType>[]} TDocs
+   * @template {MongoCreateOptions} TCreateOptions
+   * @template {MongoToObjOptions} TToObjOptions
+   * @param {TDocs} docs The documents to create.
+   * @param {?TCreateOptions} [createOptions] Options for creating documents.
+   * @param {?TToObjOptions} [toObjOptions] Options for converting the documents to objects.
+   * @returns {Promise<MongoConditionalDoc<InstanceType<typeof this.MongoModel>, TRawDocType, TToObjOptions>[]>} The created documents.
+   */
   async createMany<
     TDocs extends Partial<TRawDocType>[],
     TCreateOptions extends MongoCreateOptions,
@@ -147,6 +206,18 @@ export class Model<
     }
   }
 
+  /**
+   * Replaces all documents in the collection with the provided documents.
+   *
+   * @async
+   * @template {Partial<TRawDocType>[]} TDocs
+   * @template {MongoCreateOptions} TCreateOptions
+   * @template {MongoToObjOptions} TToObjOptions
+   * @param {TDocs} docs The documents to replace with.
+   * @param {?TCreateOptions} [createOptions] Options for creating documents.
+   * @param {?TToObjOptions} [toObjOptions] Options for converting the documents to objects.
+   * @returns {Promise<MongoConditionalDoc<InstanceType<typeof this.MongoModel>, TRawDocType, TToObjOptions>[]>} The replaced documents.
+   */
   async replaceAll<
     TDocs extends Partial<TRawDocType>[],
     TCreateOptions extends MongoCreateOptions,
@@ -167,6 +238,18 @@ export class Model<
     return documents
   }
 
+  /**
+   * Finds a document by its ID.
+   *
+   * @async
+   * @template {MongoId} TId
+   * @template {MongoProjection<TRawDocType>} TProjection
+   * @template {MongoQueryOptions<TRawDocType>} TOptions
+   * @param {TId} id The ID of the document to find.
+   * @param {?TProjection} [projection] The projection for the query.
+   * @param {?TOptions} [options] The options for the query.
+   * @returns {Promise<MongoConditionalDoc<InstanceType<typeof this.MongoModel>, TRawDocType, TOptions['lean']>>} The found document.
+   */
   async findById<
     TId extends MongoId,
     TProjection extends MongoProjection<TRawDocType>,
@@ -210,6 +293,18 @@ export class Model<
     }
   }
 
+  /**
+   * Finds a single document matching the query.
+   *
+   * @async
+   * @template {MongoQuery<TRawDocType>} TQuery
+   * @template {MongoProjection<TRawDocType>} TProjection
+   * @template {MongoQueryOptions<TRawDocType>} TOptions
+   * @param {TQuery} query The query object.
+   * @param {?TProjection} [projection] The projection for the query.
+   * @param {?TOptions} [options] The options for the query.
+   * @returns {Promise<null | MongoConditionalDoc<InstanceType<typeof this.MongoModel>, TRawDocType, TOptions['lean']>>} The found document or null if not found.
+   */
   async findOne<
     TQuery extends MongoQuery<TRawDocType>,
     TProjection extends MongoProjection<TRawDocType>,
@@ -246,6 +341,18 @@ export class Model<
     }
   }
 
+  /**
+   * Finds multiple documents matching the query.
+   *
+   * @async
+   * @template {MongoQuery<TRawDocType>} TQuery
+   * @template {MongoProjection<TRawDocType>} TProjection
+   * @template {MongoQueryOptions<TRawDocType>} TOptions
+   * @param {TQuery} query The query object.
+   * @param {?TProjection} [projection] The projection for the query.
+   * @param {?TOptions} [options] The options for the query.
+   * @returns {Promise<MongoConditionalDoc<InstanceType<typeof this.MongoModel>, TRawDocType, TOptions['lean']>[]>} The found documents.
+   */
   async findMany<
     TQuery extends MongoQuery<TRawDocType>,
     TProjection extends MongoProjection<TRawDocType>,
@@ -280,6 +387,20 @@ export class Model<
     }
   }
 
+  /**
+   * Finds a single document by a key-value pair.
+   *
+   * @async
+   * @template {string} TKey
+   * @template {any} TValue
+   * @template {MongoProjection<TRawDocType>} TProjection
+   * @template {MongoQueryOptions<TRawDocType>} TOptions
+   * @param {TKey} key The key to search by.
+   * @param {TValue} value The value to search for.
+   * @param {?TProjection} [projection] The projection for the query.
+   * @param {?TOptions} [options] The options for the query.
+   * @returns {Promise<null | MongoConditionalDoc<InstanceType<typeof this.MongoModel>, TRawDocType, TOptions['lean']>>} The found document or null if not found.
+   */
   async findOneBy<
     TKey extends string,
     TValue extends any,
@@ -300,6 +421,20 @@ export class Model<
     return doc
   }
 
+  /**
+   * Finds multiple documents by a key-value pair.
+   *
+   * @async
+   * @template {string} TKey
+   * @template {any} TValue
+   * @template {MongoProjection<TRawDocType>} TProjection
+   * @template {MongoQueryOptions<TRawDocType>} TOptions
+   * @param {TKey} key The key to search by.
+   * @param {TValue} value The value to search for.
+   * @param {?TProjection} [projection] The projection for the query.
+   * @param {?TOptions} [options] The options for the query.
+   * @returns {Promise<MongoConditionalDoc<InstanceType<typeof this.MongoModel>, TRawDocType, TOptions['lean']>[]>} The found documents.
+   */
   async findManyBy<
     TKey extends string,
     TValue extends any,
@@ -322,6 +457,18 @@ export class Model<
     return docs
   }
 
+  /**
+   * Updates a document by its ID.
+   *
+   * @async
+   * @template {MongoId} TId
+   * @template {MongoUpdateQuery<TRawDocType>} TUpdateObj
+   * @template {MongoQueryOptions<TRawDocType>} TOptions
+   * @param {TId} id The ID of the document to update.
+   * @param {TUpdateObj} updateObj The update object.
+   * @param {?TOptions} [options] The options for the query.
+   * @returns {Promise<MongoConditionalDoc<InstanceType<typeof this.MongoModel>, TRawDocType, TOptions['lean']>>} The updated document.
+   */
   async updateById<
     TId extends MongoId,
     TUpdateObj extends MongoUpdateQuery<TRawDocType>,
@@ -370,6 +517,18 @@ export class Model<
     }
   }
 
+  /**
+   * Updates a single document that matches the provided query.
+   *
+   * @async
+   * @template {MongoQuery<TRawDocType>} TQuery
+   * @template {MongoUpdateQuery<TRawDocType>} TUpdateObj
+   * @template {MongoQueryOptions<TRawDocType>} TOptions
+   * @param {TQuery} query The query to match the document.
+   * @param {TUpdateObj} updateObj The update operations to be applied to the document.
+   * @param {?TOptions} [options] Optional settings for the update operation.
+   * @returns {Promise<null | MongoConditionalDoc<InstanceType<typeof this.MongoModel>, TRawDocType, TOptions['lean']>>} The updated document or null if no document matched the query.
+   */
   async updateOne<
     TQuery extends MongoQuery<TRawDocType>,
     TUpdateObj extends MongoUpdateQuery<TRawDocType>,
@@ -411,6 +570,18 @@ export class Model<
     }
   }
 
+  /**
+   * Updates multiple documents that match the provided query.
+   *
+   * @async
+   * @template {MongoQuery<TRawDocType>} TQuery
+   * @template {MongoUpdateQuery<TRawDocType>} TUpdateObj
+   * @template {MongoUpdateQueryOptions<TRawDocType>} TOptions
+   * @param {TQuery} query The query to match the documents.
+   * @param {TUpdateObj} updateObj The update operations to be applied to the documents.
+   * @param {?TOptions} [options] Optional settings for the update operation.
+   * @returns {Promise<MongoUpdateResult>} The result of the update operation.
+   */
   async updateMany<
     TQuery extends MongoQuery<TRawDocType>,
     TUpdateObj extends MongoUpdateQuery<TRawDocType>,
@@ -429,6 +600,20 @@ export class Model<
     }
   }
 
+  /**
+   * Updates a single document that matches the provided key-value pair.
+   *
+   * @async
+   * @template {string} TKey
+   * @template {any} TValue
+   * @template {MongoUpdateQuery<TRawDocType>} TUpdateObj
+   * @template {MongoQueryOptions<TRawDocType>} TOptions
+   * @param {TKey} key The key to match the document.
+   * @param {TValue} value The value to match the document.
+   * @param {TUpdateObj} updateObj The update operations to be applied to the document.
+   * @param {?TOptions} [options] Optional settings for the update operation.
+   * @returns {Promise<null | MongoConditionalDoc<InstanceType<typeof this.MongoModel>, TRawDocType, TOptions['lean']>>} The updated document or null if no document matched the key-value pair.
+   */
   async updateOneBy<
     TKey extends string,
     TValue extends any,
@@ -449,6 +634,20 @@ export class Model<
     return doc
   }
 
+  /**
+   * Updates multiple documents that match the provided key-value pair.
+   *
+   * @async
+   * @template {string} TKey
+   * @template {any} TValue
+   * @template {MongoUpdateQuery<TRawDocType>} TUpdateObj
+   * @template {MongoUpdateQueryOptions<TRawDocType>} TOptions
+   * @param {TKey} key The key to match the documents.
+   * @param {TValue} value The value to match the documents.
+   * @param {TUpdateObj} updateObj The update operations to be applied to the documents.
+   * @param {?TOptions} [options] Optional settings for the update operation.
+   * @returns {Promise<MongoUpdateResult>} The result of the update operation.
+   */
   async updateManyBy<
     TKey extends string,
     TValue extends any,
@@ -465,6 +664,16 @@ export class Model<
     return result
   }
 
+  /**
+   * Removes a document by its ID.
+   *
+   * @async
+   * @template {MongoId} TId
+   * @template {MongoQueryOptions<TRawDocType>} TOptions
+   * @param {TId} id The ID of the document to be removed.
+   * @param {?TOptions} [options] Optional settings for the remove operation.
+   * @returns {Promise<MongoConditionalDoc<InstanceType<typeof this.MongoModel>, TRawDocType, TOptions['lean']>>} The removed document.
+   */
   async removeById<
     TId extends MongoId,
     TOptions extends MongoQueryOptions<TRawDocType>
@@ -506,6 +715,16 @@ export class Model<
     }
   }
 
+  /**
+   * Removes a single document that matches the provided query.
+   *
+   * @async
+   * @template {MongoQuery<TRawDocType>} TQuery
+   * @template {MongoDeleteQueryOptions<TRawDocType>} TOptions
+   * @param {TQuery} query The query to match the document.
+   * @param {?TOptions} [options] Optional settings for the remove operation.
+   * @returns {Promise<MongoDeleteResult>} The result of the remove operation.
+   */
   async removeOne<
     TQuery extends MongoQuery<TRawDocType>,
     TOptions extends MongoDeleteQueryOptions<TRawDocType>
@@ -518,6 +737,16 @@ export class Model<
     }
   }
 
+  /**
+   * Removes multiple documents that match the provided query.
+   *
+   * @async
+   * @template {MongoQuery<TRawDocType>} TQuery
+   * @template {MongoDeleteQueryOptions<TRawDocType>} TOptions
+   * @param {TQuery} query The query to match the documents.
+   * @param {?TOptions} [options] Optional settings for the remove operation.
+   * @returns {Promise<MongoDeleteResult>} The result of the remove operation.
+   */
   async removeMany<
     TQuery extends MongoQuery<TRawDocType>,
     TOptions extends MongoDeleteQueryOptions<TRawDocType>
@@ -530,6 +759,16 @@ export class Model<
     }
   }
 
+  /**
+   * Lists all documents with optional projection and query options.
+   *
+   * @async
+   * @template {MongoProjection<TRawDocType>} TProjection
+   * @template {MongoQueryOptions<TRawDocType>} TOptions
+   * @param {?TProjection} [projection] The fields to include or exclude from the documents.
+   * @param {?TOptions} [options] Optional settings for the list operation.
+   * @returns {Promise<MongoConditionalDoc<InstanceType<typeof this.MongoModel>, TRawDocType, TOptions['lean']>[]>} The list of documents.
+   */
   async list<
     TProjection extends MongoProjection<TRawDocType>,
     TOptions extends MongoQueryOptions<TRawDocType>
@@ -547,17 +786,39 @@ export class Model<
     return docs
   }
 
+  /**
+   * Searches for documents based on the provided search query, projection, and options.
+   *
+   * @async
+   * @template {MongoSearchQuery<TRawDocType>} TSearchQuery
+   * @template {MongoProjection<TRawDocType>} TProjection
+   * @template {MongoQueryOptions<TRawDocType>} TOptions
+   * @param {?TSearchQuery} [searchQuery] The search query containing the query, pagination, and sorting information.
+   * @param {?TProjection} [projection] The fields to include or exclude from the documents.
+   * @param {?TOptions} [options] Optional settings for the search operation.
+   * @returns {Promise<MongoSearchResult<InstanceType<typeof this.MongoModel>, TRawDocType, TOptions['lean']>>} The search result containing the documents and pagination information.
+   */
   async search<
     TSearchQuery extends MongoSearchQuery<TRawDocType>,
     TProjection extends MongoProjection<TRawDocType>,
     TOptions extends MongoQueryOptions<TRawDocType>
-  >(searchQuery: TSearchQuery, projection?: TProjection, options?: TOptions) {
+  >(
+    searchQuery?: TSearchQuery,
+    projection?: TProjection,
+    options?: TOptions
+  ): Promise<
+    MongoSearchResult<
+      InstanceType<typeof this.MongoModel>,
+      TRawDocType,
+      TOptions['lean']
+    >
+  > {
     const {
-      query,
+      query = {},
       page = DEFAULT_PAGE,
       pageSize = DEFAULT_PAGE_SIZE,
       sort = DEFAULT_SORT
-    } = searchQuery
+    } = searchQuery || {}
 
     const searchOptions = {
       skip: page * pageSize,
@@ -581,7 +842,7 @@ export class Model<
       throw findResponse.reason as MongoError
     }
 
-    const { value: totalCount } =
+    const { value: totalDocuments } =
       countResponse as PromiseFulfilledResult<number>
     const { value: documents } = findResponse as PromiseFulfilledResult<
       MongoConditionalDoc<
@@ -594,13 +855,22 @@ export class Model<
     const data = {
       page,
       pageSize,
-      totalCount,
+      totalDocuments,
       documents
     }
 
     return data
   }
 
+  /**
+   * Performs an aggregation operation on the documents.
+   *
+   * @async
+   * @template [TResultType=any]
+   * @param {MongoPipelineStage[]} pipeline The aggregation pipeline stages.
+   * @param {?MongoAggregateOptions} [options] Optional settings for the aggregation operation.
+   * @returns {Promise<TResultType[]>} The result of the aggregation operation.
+   */
   async aggregate<TResultType = any>(
     pipeline: MongoPipelineStage[],
     options?: MongoAggregateOptions

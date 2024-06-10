@@ -130,6 +130,11 @@ const SSL_CONFIG = SSL_ENABLED
     }
   : {}
 
+/**
+ * The configuration object for the MongoOdm library built from environment variables.
+ *
+ * @type {MongoConfig}
+ */
 const CONFIG: MongoConfig = {
   DBNAME: MONGO_DBNAME,
   CONNECTION_URI,

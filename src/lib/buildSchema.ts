@@ -11,6 +11,21 @@ import {
   MongoWriteConcern
 } from '../TYPES'
 
+/**
+ * Builds a Mongoose schema with the provided schema definition and options.
+ * This function also applies default plugins to the schema for handling lean queries.
+ *
+ * @export
+ * @template TRawDocType The raw document type.
+ * @template [TMongoModel=MongoModel<TRawDocType>] The Mongoose model type.
+ * @template [TInstanceMethods={}] Instance methods for the schema.
+ * @template [TQueryHelpers={}] Query helper methods for the schema.
+ * @template [TVirtuals={}] Virtual properties for the schema.
+ * @template [TStaticMethods={}] Static methods for the schema.
+ * @param {MongoSchemaDefinition<TRawDocType>} schemaDefinition The definition of the schema.
+ * @param {?MongoSchemaOptions<TRawDocType, TInstanceMethods, TQueryHelpers, TStaticMethods, TVirtuals>} [options] Optional settings for the schema.
+ * @returns {MongoSchema<TRawDocType, TMongoModel, TInstanceMethods, TQueryHelpers, TVirtuals, TStaticMethods>} The constructed Mongoose schema.
+ */
 export function buildSchema<
   TRawDocType,
   TMongoModel = MongoModel<TRawDocType>,

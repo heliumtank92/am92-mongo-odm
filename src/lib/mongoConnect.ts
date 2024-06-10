@@ -1,9 +1,23 @@
 import mongoose, { ConnectOptions } from 'mongoose'
 import CONFIG, { SERVICE } from '../CONFIG'
 
+/** @ignore */
 const { CONNECTION_URI, OPTIONS } = CONFIG
 
-export const mongoConnect = async (connectOptions?: ConnectOptions) => {
+/**
+ * Connects to the MongoDB database using Mongoose.
+ *
+ * This function establishes a connection to the MongoDB database using the provided connection URI and options.
+ * It also sets up various event listeners to handle connection events such as 'connected', 'reconnected', 'disconnected', 'close', and 'error'.
+ *
+ * In non-production environments, it enables Mongoose debug mode for more detailed logging.
+ *
+ * @export
+ * @async
+ * @param {?ConnectOptions} [connectOptions] Optional connection options to override the default options.
+ * @returns {Promise<void>} A promise that resolves when the connection is successfully established.
+ */
+export async function mongoConnect(connectOptions?: ConnectOptions) {
   if (process.env.NODE_ENV !== 'production') {
     console.debug(
       `[${SERVICE} MongoOdm] Mongoose Debug Mode Enabled for Non-Production Mode.`
