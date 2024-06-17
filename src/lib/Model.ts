@@ -22,6 +22,7 @@ import {
 } from '../TYPES'
 import { getLeanOption } from './helpers'
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE, DEFAULT_SORT } from '../CONSTANTS'
+import CONFIG from '../CONFIG'
 
 /**
  * A generic model class for interacting with MongoDB collections using Mongoose.
@@ -57,9 +58,9 @@ export class Model<
    * @param {MongoSchema} schema - The schema definition for the model.
    */
   constructor(modelName: string = '', schema: MongoSchema) {
-    this.ModelName = modelName
+    this.ModelName = `${CONFIG.COLLECTION_PREFIX}${modelName}`
     this.MongoModel = mongoose.model<TRawDocType, TMongoModel>(
-      modelName,
+      this.ModelName,
       schema
     )
 

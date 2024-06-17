@@ -63,6 +63,13 @@ export interface MongoConfig {
    */
   DBNAME: string
   /**
+   * The prefix to be used for collection names.
+   *
+   * @type {string}
+   * @memberof MongoConfig
+   */
+  COLLECTION_PREFIX?: string
+  /**
    * The URI for connecting to the MongoDB instance.
    *
    * @type {string}
