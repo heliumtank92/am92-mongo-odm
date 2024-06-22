@@ -34,7 +34,8 @@ export {
   HydratedDocument as MongoHydratedDocument,
   HydratedDocumentFromSchema as MongoHydratedDocumentFromSchema,
   HydratedSingleSubdocument as MongoHydratedSingleSubdocument,
-  HydratedArraySubdocument as MongoHydratedArraySubdocument
+  HydratedArraySubdocument as MongoHydratedArraySubdocument,
+  PopulatedDoc as MongoPopulatedDoc
 } from 'mongoose'
 
 /** @ignore */
