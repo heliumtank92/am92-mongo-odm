@@ -489,6 +489,7 @@ export class Model<
       const updateOptions = {
         new: true,
         sanitizeProjection: true,
+        runValidators: true,
         ...options,
         lean: getLeanOption(options?.lean)
       }
@@ -547,6 +548,7 @@ export class Model<
       const updateOptions = {
         new: true,
         sanitizeProjection: true,
+        runValidators: true,
         ...options,
         lean: getLeanOption(options?.lean)
       }
@@ -593,7 +595,19 @@ export class Model<
     options?: TOptions
   ): Promise<MongoUpdateResult> {
     try {
-      const result = await this.MongoModel.updateMany(query, updateObj, options)
+      const updateOptions = {
+        new: true,
+        sanitizeProjection: true,
+        runValidators: true,
+        ...options,
+        lean: getLeanOption(options?.lean)
+      }
+
+      const result = await this.MongoModel.updateMany(
+        query,
+        updateObj,
+        updateOptions
+      )
 
       return result
     } catch (error) {
