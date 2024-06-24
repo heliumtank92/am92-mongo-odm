@@ -1,6 +1,6 @@
 {
   "name": "@am92/mongo-odm",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "Mongo DB ODM (Object Document Mapper)",
   "sideEffects": false,
   "types": "dist/index.d.ts",
