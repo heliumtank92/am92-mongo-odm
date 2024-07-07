@@ -20,7 +20,7 @@ import {
   MongoUpdateQueryOptions,
   MongoUpdateResult
 } from '../TYPES'
-import { getLeanOption } from './helpers'
+import { getLeanOption, sanitizeCreateDoc } from './helpers'
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE, DEFAULT_SORT } from '../CONSTANTS'
 import CONFIG from '../CONFIG'
 
@@ -137,7 +137,8 @@ export class Model<
     >
   > {
     try {
-      const document = await this.MongoModel.create(doc)
+      const sanitizedDoc = sanitizeCreateDoc(doc)
+      const document = await this.MongoModel.create(sanitizedDoc)
 
       if (toObjOptions === null) {
         return document as MongoConditionalDoc<
@@ -186,7 +187,11 @@ export class Model<
     >[]
   > {
     try {
-      const documents = await this.MongoModel.create(docs, createOptions)
+      const sanitizedDocs = docs.map(sanitizeCreateDoc)
+      const documents = await this.MongoModel.create(
+        sanitizedDocs,
+        createOptions
+      )
 
       if (toObjOptions === null) {
         return documents as MongoConditionalDoc<
