@@ -25,7 +25,6 @@
   "repository": "git@github.com:heliumtank92/am92-mongo-odm.git",
   "homepage": "https://heliumtank92.github.io/am92-mongo-odm",
   "dependencies": {
-    "@am92/mongo-odm": "file:",
     "mongodb": "6.6.2",
     "mongoose": "^8.9.5",
     "mongoose-lean-defaults": "^2.2.1",
